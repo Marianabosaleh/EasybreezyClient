@@ -1,0 +1,152 @@
+*, *::before, *::after{
+    box-sizing: border-box;
+}
+
+body{
+    background-color: #FCEEE4 ;
+}
+.Register{
+    /*padding: 5;*/
+   /* margin: 3;*/
+    font-size: 4rem;
+    text-decoration:dashed;
+    display: flex;
+    justify-content: center;
+    font-weight:630;
+    color: #000000;
+    
+} 
+.details{
+    top: 90px;
+    position: absolute;
+    width: 230px;
+    font-size: 1.5rem;
+    left: 30px;
+    font-style: italic;
+    font-weight: lighter;
+    left: 380px;
+    
+    
+
+}
+.input-field{
+    width: 150%;
+    padding: 8px 0 ;
+    margin: 8px 0 ;
+    border-left: 2;
+    border-right: 2;
+    border-bottom: 6px solid #D9D9D9;
+    outline: none;
+    background: #D9D9D9;
+    border-radius: 30px;
+    border: 60px ;
+    margin-bottom: 10%;
+    font-size: 0.8rem;
+    
+    
+    
+}
+.submit-btn{
+    color: rgb(255, 255, 255);
+    width: 150%;
+    padding: 10px 10px;
+    cursor: pointer;
+    display: block;
+    margin: auto;
+    background: linear-gradient(to right, #000000,#000000); 
+    border:0;
+    outline:none;
+    border-radius: 30px;
+    opacity: 0.9;
+    position: relative;
+    transform: translate(109%);
+    align-items: center;
+    position: absolute;
+    top: 600px;
+    left: -100px;
+    font-size: 18px;
+    
+    
+
+}
+
+.RegisterA{
+    font-size: 4rem;
+    text-decoration:dashed;
+    display: flex;
+    justify-content: center;
+    font-weight:630;
+    color: #000000;
+} 
+.detailsA{
+    top: 90px;
+    position: absolute;
+    width: 230px;
+    font-size: 1.5rem;
+    left: 30px;
+    font-style: italic;
+    font-weight: lighter;
+    left: 380px;
+}
+.input-field-A{
+    width: 150%;
+    padding: 8px 0 ;
+    margin: 8px 0 ;
+    border-left: 2;
+    border-right: 2;
+    border-bottom: 6px solid #D9D9D9;
+    outline: none;
+    background: #D9D9D9;
+    border-radius: 30px;
+    border: 60px ;
+    margin-bottom: 10%;
+    font-size: 0.8rem;
+    
+    
+    
+}
+.submit-btn-A{
+    color: rgb(255, 255, 255);
+    width: 150%;
+    padding: 10px 10px;
+    cursor: pointer;
+    display: block;
+    margin: auto;
+    background: linear-gradient(to right, #000000,#000000); 
+    border:0;
+    outline:none;
+    border-radius: 30px;
+    opacity: 0.9;
+    position: relative;
+    transform: translate(109%);
+    align-items: center;
+    position: absolute;
+    top: 600px;
+    left: -100px;
+    font-size: 18px;
+}
+.AgentDetails{
+    top: 0.1px;
+    position: absolute;
+    width: 230px;
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: lighter;
+    left: 440px;
+
+}
+.inputAgent{
+    width: 150%;
+    padding: 8px 0 ;
+    margin: 8px 0 ;
+    border-left: 2;
+    border-right: 2;
+    border-bottom: 6px solid #D9D9D9;
+    outline: none;
+    background: #D9D9D9;
+    border-radius: 30px;
+    border: 60px ;
+    margin-bottom: 10%;
+    font-size: 0.8rem;
+
+}

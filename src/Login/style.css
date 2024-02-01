@@ -1,0 +1,95 @@
+.remember-me {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px; 
+  }
+  
+  .remember-me label {
+    margin-right: 5px; 
+  }
+  
+  .remember-me input {
+    margin-right: 5px; 
+    flex-shrink: 0; 
+    font-size: 18px;
+    height: 15px; 
+    width: 15px; 
+  }
+  body {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #FCEEE4; 
+  }
+  
+  .container {
+    text-align: center;
+    background-color: #FCEEE4; 
+    padding: 150px;
+    border-radius: 80px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+  }
+  
+  h2, h3, h4 {
+    color: #333; 
+  }
+  
+  form {
+    margin-top: 20px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px 20px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    border: 1px solid #b5b2be;
+    background-color: #f0e6e6;
+    border-radius: 30px;
+  }
+  a {
+    color: #4c4c50;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  button {
+    background-color: #090a0a; 
+    color: #fff;
+    padding: 10px 100px;
+    border: none;
+    border-radius: 300px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+  button:hover {
+    background-color: #000000; 
+  }
+  .username label,
+  .password label {
+    font-size: 22px; /* Adjust the font size as needed */
+  }
+  .form-button {
+    background-color: #000000;
+    color: #fff;
+    padding: 10px 100px;
+    border: none;
+    border-radius: 300px;
+    cursor: pointer;
+    font-size: 18px; 
+  }
+  input {
+    width: 100%;
+    padding: 10px 5px;
+    margin-bottom: 1px;
+    box-sizing: border-box;
+    border: 1px solid #D9D9D9;
+    background-color: #D9D9D9;
+    border-radius: 30px;
+  }
