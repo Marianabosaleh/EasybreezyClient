@@ -1,8 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; 
 import './style.css';
+import {loginUser} from "../firebase"; 
+//import firebase from 'firebase/compat/app';
+//import 'firebase/compat/auth';
+//import 'firebase/compat/firestore'; 
+//import { getDatabase, get, ref, child } from 'firebase/database';
+//import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 const LoginCustomer: React.FC = () => {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+function login (){
+  loginUser(email, password); 
+
+}
   return (
     <div className="container">
       <h2><em>Yay, welcome back to our website!</em></h2><br/><br/>
@@ -29,7 +41,13 @@ const LoginCustomer: React.FC = () => {
 
         <button type="submit" className="form-button">Login</button><br/><br/>
       </form>
+      
+      <Link to= '/HomePage'>
+        <button onClick={login} type='submit' className='submit-btn'>
+          login 
+        </button>
 
+      </Link>
       <p>
         <h2>New User</h2>
         <Link to='/RegisterCustomer'> 
