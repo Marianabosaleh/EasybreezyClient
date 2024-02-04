@@ -1,16 +1,20 @@
 import React from "react";
 import "./style0.css";
-import { registerUser } from "../firebase";
+import { Registercustomer } from "../firebase";
 
 //customer
 const RegisterCustomer: React.FC = () => {
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+  const [dateOfBirth, setDateOfBirth] = React.useState("");
   const [email, setEmail] = React.useState("");
-  const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
 
   function register() {
-    registerUser(email, password);
+    // Pass additional fields to registerUser function
+    Registercustomer(firstName, lastName, dateOfBirth, email, password);
   }
+
   return (
     <div>
       <a href="/" className="Register"></a>
@@ -22,6 +26,8 @@ const RegisterCustomer: React.FC = () => {
           type="text"
           className="input-field"
           placeholder="Enter First name"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
           name="first name"
           id="name"
           required
@@ -33,6 +39,8 @@ const RegisterCustomer: React.FC = () => {
           type="text"
           className="input-field"
           placeholder="Enter Last name"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
           name="last name"
           id="last name"
           required
@@ -44,6 +52,8 @@ const RegisterCustomer: React.FC = () => {
           type="date"
           className="input-field"
           placeholder="Enter Date of birth"
+          value={dateOfBirth}
+          onChange={(e) => setDateOfBirth(e.target.value)}
           name="birthday"
           id="birthday"
           required
@@ -51,7 +61,6 @@ const RegisterCustomer: React.FC = () => {
         <label htmlFor="Email address">
           <b>Email address *</b>
         </label>
-
         <input
           value={email}
           onChange={(e) => setEmail(e.target.value)}
