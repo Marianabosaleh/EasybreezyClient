@@ -8,6 +8,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import{ getDatabase, get, ref, child} from 'firebase/database'; 
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -70,14 +72,26 @@ export function Registercustomer(firstName, lastName, dateOfBirth, email, passwo
 }
 
 export function loginUser(email, password) {
+  const auth= getAuth(); 
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
+      console.log('successfuly signed in:' , user)
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
 
       console.error("Login error: ", errorMessage);
+      switch (errorCode) {
+        case "auth/user-not-found":
+          console.error("User not found. Check if the email is correct.");
+          break;
+        case "auth/wrong-password":
+          console.error("Incorrect password. Verify the entered password.");
+          break;
+        default:
+          console.error("Unexpected error. Check Firebase console for details.");
+      }
     });
 }
