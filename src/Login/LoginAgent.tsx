@@ -1,18 +1,31 @@
-import React from 'react';
-import { Link } from 'react-router-dom'; 
-//import firebase from '../firebase.js';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { loginAgent } from "../firebase";
 import './style.css';
 
 const LoginAgent: React.FC = () => {
-  // const handleGoogleSignIn = async () => {
-  //   const provider = new firebase.auth.GoogleAuthProvider();
-  //   try {
-  //     await firebase.auth().signInWithPopup(provider);
-  //     // Sign-in successful, handle user authentication
-  //   } catch (error) {
-  //     console.error('Google Sign-In Error:', error);
-  //   }
-  // };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  function login() {
+    // Clear previous errors
+    setError("");
+
+    loginAgent(email, password)
+      .then(() => {
+        // Redirect the user to the home page or another page upon successful login
+        redirectToHomePage(); // Redirect to the homepage
+      })
+      .catch((errorMessage) => {
+        setError(errorMessage.message); // Render the error message instead of the error object itself
+      });
+  }
+
+  function redirectToHomePage() {
+    // Perform redirection here
+    window.location.href = '/HomePage'; 
+  }
 
   return (
     <div className="container">
@@ -20,37 +33,36 @@ const LoginAgent: React.FC = () => {
 
       <h2>Existing User</h2>
       <form>
-        
         <div className="username">
           <label htmlFor="username">*Email</label>
-          <p><input type="text" id="username" name="username" required /></p>
+          <input type="text" id="username" name="username" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
 
         <div className="password">
           <label htmlFor="password">*Password:</label>
-          <p><input type="password" id="password" name="password" /></p>
+          <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
 
         <div className="remember-me">
-          <p><input type="checkbox" id="remember"/></p>
+          <input type="checkbox" id="remember" />
           <label htmlFor="remember">Remember me</label>
         </div>
-        
-        <a href="#">Forget password?<br/><br/></a>
 
-        <button type="submit" className="form-button">Login</button><br/><br/>
-
-        {/* Add Google Sign-In button
-        <button className="form-button" onClick={handleGoogleSignIn}>Sign in with Google</button><br/><br/> */}
+        <Link to="#">Forget password?</Link>
       </form>
 
-      <p>
+      {error && <p className="error-message">{error}</p>}
+
+      <button onClick={login} type='button' className='form-button'>
+        Login
+      </button>
+
+      <div className="new-user">
         <h2>New User</h2>
-        <Link to='/RegisterAgent'> 
+        <Link to='/RegisterAgent'>
           <button className="form-button">Register</button>
         </Link>
-        <br/><br/>
-      </p>
+      </div>
     </div>
   );
 };

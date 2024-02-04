@@ -63,7 +63,7 @@ export async function Registercustomer(firstName, lastName, dateOfBirth, email, 
 }
 
 
-export async function loginUser(email, password) {
+export async function loginCustomer(email, password) {
   try {
     const db = getFirestore();
     
@@ -77,6 +77,60 @@ export async function loginUser(email, password) {
     }
     
     // If the email exists, proceed with logging in the user
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    console.log('Successfully signed in:', user);
+    return user;
+  } catch (error) {
+    console.error("Login error: ", error.message);
+    throw error; // Rethrow error for handling in UI
+  }
+}
+export async function registerAgent(firstName, lastName, dateOfBirth, email, password, shopName, description) {
+  try {
+    // Create user with email and password
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Update user profile with first and last name
+    await updateProfile(user, {
+      displayName: `${firstName} ${lastName}`,
+    });
+
+    // Add agent data to the "agents" collection in Firestore
+    const agentData = {
+      firstName: firstName,
+      lastName: lastName,
+      dateOfBirth: dateOfBirth,
+      email: email,
+      userType: "Agent",
+      shopName: shopName,
+      description: description,
+    };
+    await addDoc(collection(db, 'agents'), agentData);
+
+    console.log("Agent registered successfully");
+    return user;
+  } catch (error) {
+    console.error("Registration error: ", error.message);
+    throw error; // Rethrow error for handling in UI
+  }
+}
+
+// Login an agent
+export async function loginAgent(email, password) {
+  try {
+    // Check if the provided email exists in the agents collection
+    const agentsRef = collection(db, 'agents');
+    const q = query(agentsRef, where('email', '==', email));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      throw new Error("Email not found. Please check your email and try again.");
+    }
+
+    // If the email exists, proceed with logging in the agent
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 

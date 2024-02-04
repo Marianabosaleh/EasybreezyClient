@@ -25,6 +25,7 @@ const RegisterCustomer: React.FC = () => {
   return (
     <div>
       <a href="/" className="Register"></a>
+      
       <div id="register" className="details">
         <label htmlFor="first name">
           <b>First name *</b>

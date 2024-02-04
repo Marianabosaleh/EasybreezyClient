@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { loginUser } from "../firebase";
+import { loginCustomer } from "../firebase";
 import './style.css';
 
 const LoginCustomer: React.FC = () => {
@@ -12,13 +12,19 @@ const LoginCustomer: React.FC = () => {
     // Clear previous errors
     setError("");
 
-    loginUser(email, password)
+    loginCustomer(email, password)
       .then(() => {
         // Redirect the user to the home page or another page upon successful login
+        redirectToHomePage(); // Redirect to the homepage
       })
       .catch((errorMessage) => {
         setError(errorMessage.message); // Render the error message instead of the error object itself
       });
+  }
+
+  function redirectToHomePage() {
+    // Perform redirection here
+    window.location.href = '/HomePage'; 
   }
 
   return (
