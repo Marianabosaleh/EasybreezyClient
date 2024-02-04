@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom'; 
 import "./style0.css";
 import { Registercustomer } from "../firebase";
 
@@ -95,9 +96,11 @@ const RegisterCustomer: React.FC = () => {
           id="psw-repeat"
           required
         />
+        <Link to='/LoginCustomer'> 
         <button onClick={register} type="submit" className="submit-btn">
           Register
         </button>
+        </Link>
       </a>
     </div>
   );
