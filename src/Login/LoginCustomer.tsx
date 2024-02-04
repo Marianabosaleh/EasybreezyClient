@@ -1,60 +1,62 @@
-import React from 'react';
-import { Link } from 'react-router-dom'; 
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { loginUser } from "../firebase";
 import './style.css';
-import {loginUser} from "../firebase"; 
-//import firebase from 'firebase/compat/app';
-//import 'firebase/compat/auth';
-//import 'firebase/compat/firestore'; 
-//import { getDatabase, get, ref, child } from 'firebase/database';
-//import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 const LoginCustomer: React.FC = () => {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-function login (){
-  loginUser(email, password); 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-}
+  function login() {
+    // Clear previous errors
+    setError("");
+
+    loginUser(email, password)
+      .then(() => {
+        // Redirect the user to the home page or another page upon successful login
+      })
+      .catch((errorMessage) => {
+        setError(errorMessage.message); // Render the error message instead of the error object itself
+      });
+  }
+
   return (
     <div className="container">
-      <h2><em>Yay, welcome back to our website!</em></h2><br/><br/>
+      <h2><em>Welcome back to our website!</em></h2><br /><br />
 
       <h2>Existing User</h2>
       <form>
-        
         <div className="username">
           <label htmlFor="username">*Email</label>
-          <p><input type="text" id="username" name="username" required /></p>
+          <input type="text" id="username" name="username" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
 
         <div className="password">
           <label htmlFor="password">*Password:</label>
-          <p><input type="password" id="password" name="password" /></p>
+          <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
 
         <div className="remember-me">
-          <p><input type="checkbox" id="remember"/></p>
+          <input type="checkbox" id="remember" />
           <label htmlFor="remember">Remember me</label>
         </div>
-        
-        <a href="#">Forget password?<br/><br/></a>
 
-        <button type="submit" className="form-button">Login</button><br/><br/>
+        <Link to="#">Forget password?</Link>
       </form>
-      
-      <Link to= '/HomePage'>
-        <button onClick={login} type='submit' className='submit-btn'>
-          login 
-        </button>
 
-      </Link>
-      <p>
+      {error && <p className="error-message">{error}</p>}
+
+      <button onClick={login} type='button' className='form-button'>
+        Login
+      </button>
+
+      <div className="new-user">
         <h2>New User</h2>
-        <Link to='/RegisterCustomer'> 
+        <Link to='/RegisterCustomer'>
           <button className="form-button">Register</button>
         </Link>
-        <br/><br/>
-      </p>
+      </div>
     </div>
   );
 };

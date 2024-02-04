@@ -2,13 +2,13 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { updateProfile } from "firebase/auth";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc,  query, where, getDocs } from "firebase/firestore";
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import{ getDatabase, get, ref, child} from 'firebase/database'; 
+
 
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -28,70 +28,64 @@ const firebaseConfig = {
   measurementId: "G-DW80T097S1",
 };
 
+// Initialize Firebase app
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const auth = getAuth();
+const auth = getAuth(); // Get the authentication instance
+const db = getFirestore(); // Get the Firestore instance
 
-export function Registercustomer(firstName, lastName, dateOfBirth, email, password) {
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
+export async function Registercustomer(firstName, lastName, dateOfBirth, email, password) {
+  try {
+    // Create user with email and password
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
 
-      updateProfile(user, {
-        displayName: `${firstName} ${lastName}`,
-      }).then(() => {
-        try {
-          const db = getFirestore();
-          const usersCollection = collection(db, 'users');
-          const userData = {
-            firstName: firstName,
-            lastName: lastName,
-            dateOfBirth: dateOfBirth
-          };
-          addDoc(usersCollection, userData)
-            .then(() => {
-              console.log("User data added successfully");
-            })
-            .catch((error) => {
-              console.error("Error adding user data: ", error);
-            });
-        } catch (error) {
-          console.error("Error accessing Firestore: ", error);
-        }
-      }).catch((error) => {
-        console.error("Error updating profile: ", error);
-      });
-
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-     
-      console.error("Registration error: ", errorMessage);
+    // Update user profile with first and last name
+    await updateProfile(user, {
+      displayName: `${firstName} ${lastName}`,
     });
+
+    // Add user data to the "customers" collection in Firestore
+    const userData = {
+      firstName: firstName,
+      lastName: lastName,
+      dateOfBirth: dateOfBirth,
+      email: email,
+      userType: "Customer" 
+    };
+    await addDoc(collection(db, 'customers'), userData);
+
+    console.log("User registered successfully as customer");
+    return user;
+  } catch (error) {
+    console.error("Registration error: ", error.message);
+    throw error; // Rethrow error for handling in UI
+  }
 }
 
-export function loginUser(email, password) {
-  const auth= getAuth(); 
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      console.log('successfuly signed in:' , user)
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
 
-      console.error("Login error: ", errorMessage);
-      switch (errorCode) {
-        case "auth/user-not-found":
-          console.error("User not found. Check if the email is correct.");
-          break;
-        case "auth/wrong-password":
-          console.error("Incorrect password. Verify the entered password.");
-          break;
-        default:
-          console.error("Unexpected error. Check Firebase console for details.");
-      }
-    });
+export async function loginUser(email, password) {
+  try {
+    const db = getFirestore();
+    
+    // Check if the provided email exists in the customers collection
+    const customersRef = collection(db, 'customers');
+    const q = query(customersRef, where('email', '==', email));
+    const querySnapshot = await getDocs(q);
+    
+    if (querySnapshot.empty) {
+      throw new Error("Email not found. Please check your email and try again.");
+    }
+    
+    // If the email exists, proceed with logging in the user
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    console.log('Successfully signed in:', user);
+    return user;
+  } catch (error) {
+    console.error("Login error: ", error.message);
+    throw error; // Rethrow error for handling in UI
+  }
 }
+
+

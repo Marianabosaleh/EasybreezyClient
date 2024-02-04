@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import "./style0.css";
 import { Registercustomer } from "../firebase";
 
-//customer
 const RegisterCustomer: React.FC = () => {
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
@@ -12,14 +11,21 @@ const RegisterCustomer: React.FC = () => {
   const [password, setPassword] = React.useState("");
 
   function register() {
-    // Pass additional fields to registerUser function
-    Registercustomer(firstName, lastName, dateOfBirth, email, password);
+    // Pass additional fields to Registercustomer function
+    Registercustomer(firstName, lastName, dateOfBirth, email, password)
+      .then(() => {
+        // Registration successful, you can redirect the user to another page
+      })
+      .catch((errorMessage) => {
+        // Handle registration error
+        console.error("Registration error: ", errorMessage);
+      });
   }
 
   return (
     <div>
       <a href="/" className="Register"></a>
-      <a id="register" className="details">
+      <div id="register" className="details">
         <label htmlFor="first name">
           <b>First name *</b>
         </label>
@@ -85,6 +91,7 @@ const RegisterCustomer: React.FC = () => {
           id="psw"
           required
         />
+        {/* Uncomment this section if you want to confirm the password
         <label htmlFor="Confirm password">
           <b>Confirm password *</b>
         </label>
@@ -95,13 +102,12 @@ const RegisterCustomer: React.FC = () => {
           name="psw-repeat"
           id="psw-repeat"
           required
-        />
-        <Link to='/LoginCustomer'> 
+        /> */}
         <button onClick={register} type="submit" className="submit-btn">
           Register
         </button>
-        </Link>
-      </a>
+        <p>Already have an account? <Link to='/LoginCustomer'>Login here</Link></p>
+      </div>
     </div>
   );
 };
