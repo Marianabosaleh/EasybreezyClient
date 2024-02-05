@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { registerAgent } from "../firebase"; // Assuming you have a function to register agents in your firebase module
+import { registerAgent } from "../firebase"; 
 import './style0.css';
 
+// Define the RegisterAgent functional component
 const RegisterAgent: React.FC = () => {
+ // State variables to manage form input values and registration status
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
@@ -13,9 +15,12 @@ const RegisterAgent: React.FC = () => {
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
 
+ // Function to handle agent registration
   function register(event: React.FormEvent) {
     event.preventDefault(); // Prevent default form submission
 
+    
+    // Call the registerAgent function from the firebase module
     registerAgent(firstName, lastName, dateOfBirth, email, password, shopName, description)
       .then(() => {
         // Redirect to the login page after successful registration
@@ -122,6 +127,7 @@ const RegisterAgent: React.FC = () => {
           id="description"
           required
         />
+        
         <button onClick={register} type="submit" className="submit-btn">
           Register
         </button>

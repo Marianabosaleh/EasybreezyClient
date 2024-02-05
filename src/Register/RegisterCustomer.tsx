@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import "./style0.css";
 import { Registercustomer } from "../firebase";
 
+// Define the RegisterAgent functional component
 const RegisterCustomer: React.FC = () => {
+  // State variables to manage form input values and registration status
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const [dateOfBirth, setDateOfBirth] = React.useState("");
