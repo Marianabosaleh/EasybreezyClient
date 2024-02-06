@@ -1,43 +1,49 @@
 /* HomePage.css */
 .HomePage {
-    background-color: #FCEEE4;
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center content horizontally */
-    justify-content: center; /* Center content vertically */
-    height: 100vh; /* Set the height to fill the viewport */
-  }
-  
-  .icon-container {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-end; /* Align icons to the end of the container */
-    margin-top: auto; /* Push the icon container to the end of the page */
-  }
-  
-  /* Styles for specific icons */
-  .search-icon,
-  .heart-icon,
-  .user-icon,
-  .cart-icon,
-  .home-icon {
-    font-size: 24px;
-    margin: 0 10px;
-    cursor: pointer;
-  }
-  
-  
-  
-  .shoes {
-    width: 200px;
-    height: 200px; /* Removed the space between 200 and px */
-    margin-bottom: 20px; /* Adjusted margin-bottom value */
-  }
-  
-  .T-SHIRT {
-    width: 200px;
-    height: 200px; /* Removed the space between 200 and px */
-    margin-bottom: 20px; /* Adjusted margin-bottom value */
-  }
-  
-  
+  background-color: #FCEEE4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.categories-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+
+.category-container {
+  cursor: pointer;
+  text-align: center;
+  margin: 0 25px;
+}
+
+.category-image {
+  width: 100px;
+  height: 100px;
+}
+
+.category-name {
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+.icon-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  margin-top: auto;
+}
+
+/* Styles for specific icons */
+.search-icon,
+.heart-icon,
+.user-icon,
+.cart-icon,
+.home-icon {
+  font-size: 24px;
+  margin: 0 40px;
+  cursor: pointer;
+}
