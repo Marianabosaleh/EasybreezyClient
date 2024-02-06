@@ -33,6 +33,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(); // Get the authentication instance
 const db = getFirestore(); // Get the Firestore instance
 
+// Function to register a new customer
 export async function Registercustomer(firstName, lastName, dateOfBirth, email, password) {
   try {
     // Create user with email and password
