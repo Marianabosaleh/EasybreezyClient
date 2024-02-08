@@ -8,8 +8,8 @@ import RegisterAgent from './Register/registerAgent';
 import RegisterCustomer from './Register/RegisterCustomer';
 import HomePage from './Homepage/HomePage';
 import ShoesPage from "./Categories/shoes";
-
-
+import CartPage from "./Cart/CartPage";
+import FavoritesPage from "./favorites/FavoritesPage";
 function App() {
   return (
     <Router>
@@ -23,6 +23,9 @@ function App() {
         <Route path="/RegisterCustomer" element={<RegisterCustomer />} />
         <Route path="/HomePage" element={<HomePage/>} />
         <Route path="/ShoesPage" element={<ShoesPage/>} />
+        <Route path="/CartPage" element={<CartPage/>} />
+        <Route path="/FavoritesPage" element={<FavoritesPage />} /> 
+
       </Routes>
     </Router>
   );

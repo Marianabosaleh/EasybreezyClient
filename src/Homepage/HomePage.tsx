@@ -46,8 +46,12 @@ const HomePage: React.FC = () => {
         <Link to="/" className="home-icon">
           <FaHome />
         </Link>
-        <FaShoppingCart className="cart-icon" />
-        <FaHeart className="heart-icon" />
+        <Link to="/CartPage">
+          <FaShoppingCart className="cart-icon" />
+        </Link>
+        <Link to="/FavoritesPage">
+          <FaHeart className="heart-icon" />
+        </Link>
         <FaUser className="user-icon" />
       </div>
     </div>
