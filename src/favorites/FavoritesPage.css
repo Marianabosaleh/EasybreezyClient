@@ -1,0 +1,41 @@
+/* FavoritesPage.css */
+.favorites-page {
+    background-color: #FCEEE4;
+    padding: 20px;
+  }
+  
+  .favorites-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap to the next line */
+  }
+  
+  .favorite-item {
+    flex: 0 0 200px; /* Each item takes up 200px width */
+    margin-right: 20px; /* Add spacing between items */
+    margin-bottom: 20px; /* Add spacing between rows */
+  }
+  
+  .favorite-details {
+    display: flex;
+    justify-content: space-between; /* Space out name and price */
+    align-items: center; /* Vertically center items */
+  }
+  
+  .favorite-name {
+    font-weight: bold;
+  }
+  
+  .favorite-price {
+    color: #666; /* Dim color for price */
+  }
+  
+  .favorite-button {
+    background-color: #ccc; /* Light gray background */
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
