@@ -8,6 +8,7 @@ import RegisterAgent from './Register/registerAgent';
 import RegisterCustomer from './Register/RegisterCustomer';
 import HomePage from './Homepage/HomePage';
 import ShoesPage from "./Categories/shoes";
+import SearchPage from "./Searchpage/SearchPage";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/RegisterCustomer" element={<RegisterCustomer />} />
         <Route path="/HomePage" element={<HomePage/>} />
         <Route path="/ShoesPage" element={<ShoesPage/>} />
+        <Route path="/SearchPage" element={<SearchPage/>}/>
       </Routes>
     </Router>
   );

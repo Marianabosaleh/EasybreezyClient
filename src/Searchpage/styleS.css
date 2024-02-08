@@ -1,0 +1,46 @@
+.search-page-container {
+  /* CSS styles for the search page container */
+  display: flex;
+  justify-content: center; /* Center the search bar horizontally */
+  align-items: flex-start; /* Align the search bar to the top */
+  height: 100vh; /* Adjust height if needed */
+}
+
+.search-form {
+  /* CSS styles for the search form */
+  background-color: #FCEEE4;
+  display: flex;
+  padding: 20px;
+  align-items: center; /* Center items horizontally */
+  width: 20cm; /* Ensure full width */
+}
+
+.search-input {
+  /* CSS styles for the search input */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 30px;
+  margin-bottom: 1px; /* Add some spacing between input and button */
+  width: 80%; /* Adjust width as needed */
+}
+
+.search-button {
+  /* CSS styles for the search button */
+  padding: 7px;
+  border-radius: 30px;
+  font-size: small;
+  width: 20%; /* Adjust width to match input */
+}
+
+/* Styles for specific icons */
+.search-icon,
+.heart-icon,
+.user-icon,
+.cart-icon,
+.home-icon {
+  font-size: 24px;
+  margin: 10px 40 10px ;
+  cursor: pointer;
+ 
+  
+}

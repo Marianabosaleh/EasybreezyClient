@@ -42,7 +42,9 @@ const HomePage: React.FC = () => {
 
       {/* Icons */}
       <div className="icon-container">
-        <FaSearch className="search-icon" />
+        <Link to="/SearchPage">
+          <FaSearch className="search-icon" />
+        </Link>
         <Link to="/" className="home-icon">
           <FaHome />
         </Link>
