@@ -45,8 +45,8 @@ const HomePage: React.FC = () => {
         <Link to="/SearchPage">
           <FaSearch className="search-icon" />
         </Link>
-        <Link to="/" className="home-icon">
-          <FaHome />
+        <Link to="/HomePage">
+          <FaHome  className="home-icon"/>
         </Link>
         <Link to="/CartPage">
           <FaShoppingCart className="cart-icon" />
