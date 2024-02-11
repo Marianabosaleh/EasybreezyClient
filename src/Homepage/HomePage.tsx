@@ -17,7 +17,7 @@ const HomePage: React.FC = () => {
       {/* Categories */}
       <div className="categories-row">
         {/* Shoes category */}
-        <Link to="/ShoesPage" className="category-container">
+        <Link to="/ShoePage" className="category-container">
           <img src={shoes} alt="shoes" className="category-image" />
           <p className="category-name">Shoes</p>
         </Link>
