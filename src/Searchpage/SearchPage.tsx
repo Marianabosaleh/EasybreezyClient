@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './styleS.css';
-import { getFirestore, collection, getDocs } from 'firebase/firestore'; // Adjust the import path as per your file structure
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore'; // Adjust the import path as per your file structure
 import { FaSearch, FaHome, FaShoppingCart, FaHeart, FaUser } from 'react-icons/fa'; // Importing Font Awesome icons
 import { Link } from 'react-router-dom'; // If you're using React Router for navigation
 
@@ -41,33 +41,37 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
 // Define the SearchPage component
 const SearchPage: React.FC = () => {
-  // Define state for product names
-  const [productNames, setProductNames] = useState<string[]>([]);
-
-  // Fetch product names from Firebase database
-  useEffect(() => {
-    const fetchProductNames = async () => {
-      try {
-        const firestore = getFirestore(); // Get Firestore instance
-        const querySnapshot = await getDocs(collection(firestore, 'products')); // Access Firestore collection
-        const names = querySnapshot.docs.map(doc => doc.data().name as string); // Extract product names
-        setProductNames(names);
-      } catch (error) {
-        console.error('Error fetching product names:', error);
-      }
-    };
-    fetchProductNames();
-  }, []);
+  // Define state for matching products
+  const [matchingProducts, setMatchingProducts] = useState<any[]>([]);
 
   // Event handler for search
-  const handleSearch = (term: string) => {
+  const handleSearch = async (term: string) => {
     // Perform search operation with term
     console.log('Searching for:', term);
-    // Implement search by prefix algorithm
-    const filteredProducts = productNames.filter((name) =>
-      name.toLowerCase().startsWith(term.toLowerCase())
-    );
-    console.log('Matching products:', filteredProducts);
+    
+    try {
+      const firestore = getFirestore(); // Get Firestore instance
+
+      // Array to store matching products
+      const products: any[] = [];
+
+      // Query each category collection separately
+      const categories = ['shoes', 'bottoms', 'tops', 'accessories'];
+      for (const category of categories) {
+        const q = query(collection(firestore, category), where('name', '>=', term));
+        const querySnapshot = await getDocs(q);
+
+        querySnapshot.forEach((doc) => {
+          // Extract product data
+          const productData = doc.data();
+          products.push(productData);
+        });
+      }
+
+      setMatchingProducts(products);
+    } catch (error) {
+      console.error('Error searching for products:', error);
+    }
   };
 
   return (
@@ -84,6 +88,15 @@ const SearchPage: React.FC = () => {
         <FaUser className="user-icon" />
       </div>
       <SearchBar onSearch={handleSearch} />
+      {/* Render matching products here */}
+      <div className="matching-products">
+        {matchingProducts.map((product, index) => (
+          <div key={index} className="product">
+            <p>{product.name}</p>
+            {/* Add more details or formatting for product display */}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
