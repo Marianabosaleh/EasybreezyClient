@@ -32,7 +32,7 @@ const AddShoeForm: React.FC = () => {
         <input type="url" placeholder="Image URL" value={imageSrc} onChange={e => setImageSrc(e.target.value)} required />
         <input type="text" placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} required />
         <input type="number" placeholder="Price" value={price} onChange={e => setPrice(e.target.value)} required />
-        <button type="submit">Add Shoe</button>
+        <button type="submit">Add Shoe</button> 
       </form>
     </div>
   );

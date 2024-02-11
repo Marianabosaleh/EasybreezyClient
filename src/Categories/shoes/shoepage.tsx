@@ -1,4 +1,3 @@
-// Import statements for Firebase and React
 import React, { useState, useEffect } from 'react';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
@@ -26,12 +25,12 @@ const ShoePage = () => {
   return (
     <div>
       <h1>Shoe Products</h1>
-      <div>
+      <div className="shoe-container">
         {shoes.map(shoe => (
-          <div key={shoe.id}>
+          <div key={shoe.id} className="shoe-item">
             <h2>{shoe.name}</h2>
-            <img src={shoe.imageSrc} alt={shoe.name} />
-            <p>{shoe.description}</p>
+            <img src={shoe.imageSrc} alt={shoe.name} className="shoe-image" style={{ maxWidth: '200px', maxHeight: '150px' }} />
+            <p className="shoe-description">{shoe.description}</p>
             <p>Price: ${shoe.price}</p>
           </div>
         ))}
