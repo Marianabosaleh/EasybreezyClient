@@ -1,33 +1,54 @@
 const express = require('express');
 const router = express.Router();
 const puppeteer = require('puppeteer');
-const admin = require('firebase-admin');
 
-// Initialize Firebase Admin SDK
-var admin = require("firebase-admin");
-
-var serviceAccount = require("./service_account.json");
+// Initialize Firebase Admin SDK and Firestore
+const admin = require("firebase-admin");
+const serviceAccount = require("./service_account.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://easybreezy-30c56-default-rtdb.asia-southeast1.firebasedatabase.app"
 });
+
+const db = admin.firestore();
 
 router.get('/scrape', async (req, res) => {
   try {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+
+    });
     const page = await browser.newPage();
-    // Puppeteer scraping logic
-    // Example: Scrape data from a website
-    await page.goto('https://example.com');
-    const data = await page.evaluate(() => {
+    
+    // Navigate to the Amazon homepage
+    await page.goto('https://www.amazon.com/');
+    
+    // Click on the category link for shoes
+    await page.click('a[href="/s?k=shoes&ref=nb_sb_noss_2"]');
+    
+    // Wait for the products to load on the shoes category page
+    await page.waitForSelector('.s-result-item');
+
+    // Scrape product data from the first shoe product on the page
+    const product = await page.evaluate(() => {
+      const productElement = document.querySelector('.s-result-item');
+      if (!productElement) {
+        throw new Error('No shoe products found on the page');
+      }
+
+      const productName = productElement.querySelector('h2').innerText;
+      const productPrice = productElement.querySelector('.a-price .a-offscreen').innerText;
+      const productDescription = productElement.querySelector('.a-size-base-plus').innerText;
+
       return {
-        title: document.title,
-        content: document.querySelector('p').textContent.trim(),
+        name: productName,
+        price: productPrice,
+        description: productDescription
       };
     });
-    // Update Firebase with scraped data
-    await admin.database().ref('scrapedData').push(data);
+
+    // Add the product data to Firestore
+    await db.collection('products').doc('shoes').collection('items').add(product);
+
     await browser.close();
     res.status(200).send('Data scraped and updated successfully');
   } catch (error) {

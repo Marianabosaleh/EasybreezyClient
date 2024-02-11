@@ -7,6 +7,10 @@ import LoginAgent from "./Login/LoginAgent";
 import RegisterAgent from './Register/registerAgent';
 import RegisterCustomer from './Register/RegisterCustomer';
 import HomePage from './Homepage/HomePage';
+import ShoePage from "./Categories/shoes/shoepage";
+import CartPage from "./Cart/CartPage";
+import FavoritesPage from "./favorites/FavoritesPage";
+import SearchPage from "./Searchpage/SearchPage";
 
 
 function App() {
@@ -21,6 +25,11 @@ function App() {
         <Route path="/RegisterAgent" element={<RegisterAgent />} />
         <Route path="/RegisterCustomer" element={<RegisterCustomer />} />
         <Route path="/HomePage" element={<HomePage/>} />
+        <Route path="/ShoePage" element={<ShoePage/>} />
+        <Route path="/CartPage" element={<CartPage/>} />
+        <Route path="/FavoritesPage" element={<FavoritesPage/>} />
+        <Route path="/SearchPage" element={<SearchPage/>}/>
+
       </Routes>
     </Router>
   );
