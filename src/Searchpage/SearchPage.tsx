@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './styleS.css';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore'; // Adjust the import path as per your file structure
 import { FaSearch, FaHome, FaShoppingCart, FaHeart, FaUser } from 'react-icons/fa'; // Importing Font Awesome icons
@@ -33,6 +33,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         value={searchTerm}
         onChange={handleSearchChange}
         className="search-input"
+        id="searchTerm" // Add an id attribute
+        name="searchTerm" // Add a name attribute
       />
       <button type="submit" className="search-button">Search</button>
     </form>
@@ -68,6 +70,7 @@ const SearchPage: React.FC = () => {
         });
       }
 
+      console.log('Matching Products:', products); // Log the products array
       setMatchingProducts(products);
     } catch (error) {
       console.error('Error searching for products:', error);
