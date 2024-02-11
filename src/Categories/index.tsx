@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { addShoeProduct } from '../../firebase'; // Import the addShoeProduct function
+import { addShoeProduct } from '../firebase'; // Import the addShoeProduct function
 
 const AddShoeForm: React.FC = () => {
   const [name, setName] = useState('');
