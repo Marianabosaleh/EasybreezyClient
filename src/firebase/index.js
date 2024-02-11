@@ -141,6 +141,26 @@ export async function loginAgent(email, password) {
     console.error("Login error: ", error.message);
     throw error; // Rethrow error for handling in UI
   }
+
+}
+
+// Function to add shoe product data
+export async function addShoeProduct(name, imageSrc, description, price) {
+  try {
+    // Add shoe product data to the "shoes" collection in Firestore
+    const shoeData = {
+      name: name,
+      imageSrc: imageSrc,
+      description: description,
+      price: price,
+    };
+    await addDoc(collection(db, 'shoes'), shoeData);
+
+    console.log("Shoe product added successfully");
+  } catch (error) {
+    console.error("Error adding shoe product: ", error.message);
+    throw error; // Rethrow error for handling in UI
+  }
 }
 
 

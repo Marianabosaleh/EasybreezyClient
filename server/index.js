@@ -2,21 +2,20 @@ const express = require('express');
 const router = express.Router();
 const puppeteer = require('puppeteer');
 
-// Initialize Firebase Admin SDK
-var admin = require("firebase-admin");
-var serviceAccount = require("./service_account.json");
+// Initialize Firebase Admin SDK and Firestore
+const admin = require("firebase-admin");
+const serviceAccount = require("./service_account.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://easybreezy-30c56-default-rtdb.asia-southeast1.firebasedatabase.app"
 });
+
+const db = admin.firestore();
 
 router.get('/scrape', async (req, res) => {
   try {
     const browser = await puppeteer.launch({
-      headless: false,
-      defaultViewport: false,
-      userDataDir: "./tmp"
+
     });
     const page = await browser.newPage();
     
@@ -47,8 +46,8 @@ router.get('/scrape', async (req, res) => {
       };
     });
 
-    // Update Firebase with scraped data
-    await admin.database().ref('scrapedData').push(product);
+    // Add the product data to Firestore
+    await db.collection('products').doc('shoes').collection('items').add(product);
 
     await browser.close();
     res.status(200).send('Data scraped and updated successfully');
