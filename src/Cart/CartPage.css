@@ -1,0 +1,37 @@
+/* CartPage.css */
+.cart-page {
+    background-color: #FCEEE4;
+    padding: 20px;
+  }
+  
+  .cart-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .cart-item {
+    margin-bottom: 15px;
+  }
+  
+  .cart-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .cart-name {
+    font-weight: bold;
+  }
+  
+  .cart-price {
+    color: #666;
+  }
+  
+  .remove-button {
+    background-color: #ccc;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
