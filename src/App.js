@@ -10,6 +10,7 @@ import HomePage from './Homepage/HomePage';
 import ShoePage from "./Categories/shoes/shoepage";
 import CartPage from "./Cart/CartPage";
 import FavoritesPage from "./favorites/FavoritesPage";
+import SearchPage from "./Searchpage/SearchPage";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/ShoePage" element={<ShoePage/>} />
         <Route path="/CartPage" element={<CartPage/>} />
         <Route path="/FavoritesPage" element={<FavoritesPage/>} />
+        <Route path="/SearchPage" element={<SearchPage/>}/>
 
       </Routes>
     </Router>
