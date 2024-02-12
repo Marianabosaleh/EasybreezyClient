@@ -45,6 +45,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 const SearchPage: React.FC = () => {
   // Define state for matching products
   const [matchingProducts, setMatchingProducts] = useState<any[]>([]);
+  // Define state for selected product
+  const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
 
   // Event handler for search
   const handleSearch = async (term: string) => {
@@ -66,7 +68,10 @@ const SearchPage: React.FC = () => {
         querySnapshot.forEach((doc) => {
           // Extract product data
           const productData = doc.data();
-          products.push(productData);
+          products.push({
+            id: doc.id, // Include document ID
+            ...productData, // Spread other fields
+          });
         });
       }
 
@@ -75,6 +80,11 @@ const SearchPage: React.FC = () => {
     } catch (error) {
       console.error('Error searching for products:', error);
     }
+  };
+
+  // Function to handle product selection
+  const handleProductSelect = (product: any) => {
+    setSelectedProduct(product);
   };
 
   return (
@@ -94,12 +104,25 @@ const SearchPage: React.FC = () => {
       {/* Render matching products here */}
       <div className="matching-products">
         {matchingProducts.map((product, index) => (
-          <div key={index} className="product">
+          <div key={index} className="product" onClick={() => handleProductSelect(product)}>
             <p>{product.name}</p>
+            <p>Description: {product.description}</p>
+            <p>Price: ${product.price}</p>
+            <img src={product.imageSrc} alt={product.name} />
             {/* Add more details or formatting for product display */}
           </div>
         ))}
       </div>
+      {/* Render selected product details */}
+      {selectedProduct && (
+        <div className="selected-product">
+          <h2>{selectedProduct.name}</h2>
+          <p>Description: {selectedProduct.description}</p>
+          <p>Price: ${selectedProduct.price}</p>
+          <img src={selectedProduct.imageSrc} alt={selectedProduct.name} />
+          {/* Render additional product details */}
+        </div>
+      )}
     </div>
   );
 };
