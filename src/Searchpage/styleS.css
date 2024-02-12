@@ -44,3 +44,22 @@
  
   
 }
+.selected-product {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.selected-product img {
+  width: 200px; /* Adjust the width as needed */
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.selected-product p {
+  margin-bottom: 5px;
+}
+
+
