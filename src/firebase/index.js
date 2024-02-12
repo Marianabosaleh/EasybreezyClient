@@ -144,23 +144,19 @@ export async function loginAgent(email, password) {
 
 }
 
-// Function to add shoe product data
-export async function addShoeProduct(name, imageSrc, description, price) {
+export async function addProduct(name, imageSrc, description, price, categoryName) {
   try {
-    // Add shoe product data to the "shoes" collection in Firestore
-    const shoeData = {
+    const productData = {
       name: name,
       imageSrc: imageSrc,
       description: description,
       price: price,
     };
-    await addDoc(collection(db, 'shoes'), shoeData);
-
-    console.log("Shoe product added successfully");
+    await addDoc(collection(db, categoryName), productData); // Use the provided category name
+    console.log("Product added successfully");
   } catch (error) {
-    console.error("Error adding shoe product: ", error.message);
+    console.error(`Error adding ${categoryName} product: `, error.message);
     throw error; // Rethrow error for handling in UI
   }
 }
-
 

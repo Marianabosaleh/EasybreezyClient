@@ -22,21 +22,25 @@ const HomePage: React.FC = () => {
           <p className="category-name">Shoes</p>
         </Link>
         {/* Bottoms category */}
-        <Link to="/bottoms" className="category-container">
+        <Link to="/BottomsPage" className="category-container">
           <img src={bottoms} alt="bottoms" className="category-image" />
           <p className="category-name">Bottoms</p>
         </Link>
       </div>
       <div className="categories-row">
         {/* Accessories category */}
-        <Link to="/accessories" className="category-container">
+        <Link to="/AccessoriesPage" className="category-container">
           <img src={accessories} alt="Accessories" className="category-image" />
           <p className="category-name">Accessories</p>
         </Link>
         {/* Tops category */}
-        <Link to="/tops" className="category-container">
+        <Link to="/TopsPage" className="category-container">
           <img src={T_SHIRT} alt="tops" className="category-image" />
           <p className="category-name">Tops</p>
+        </Link>
+        <Link to="/AddProductForm" className="category-container">
+          <img src={T_SHIRT} alt="tops" className="category-image" />
+          <p className="category-name">add</p>
         </Link>
       </div>
 
