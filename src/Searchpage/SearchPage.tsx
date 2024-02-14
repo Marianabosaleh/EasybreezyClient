@@ -1,89 +1,88 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styleS.css';
-import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore'; // Adjust the import path as per your file structure
+import { getFirestore, collection, query, where, getDocs, DocumentData } from 'firebase/firestore'; // Adjust the import path as per your file structure
 import { FaSearch, FaHome, FaShoppingCart, FaHeart, FaUser } from 'react-icons/fa'; // Importing Font Awesome icons
 import { Link } from 'react-router-dom'; // If you're using React Router for navigation
 
-// Define the props interface for the SearchBar component
-interface SearchBarProps {
-  onSearch: (term: string) => void; // Function that accepts a string term and returns void
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  imageSrc: string;
 }
 
-// Define the SearchBar component
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
-  // Define state for the search term
-  const [searchTerm, setSearchTerm] = useState<string>('');
-
-  // Event handler for input change
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value); // Update the search term state
-  };
-
-  // Event handler for form submission
-  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // Prevent default form submission behavior
-    onSearch(searchTerm); // Call the onSearch function with the current search term
-  };
-
-  return (
-    <form className="search-form" onSubmit={handleSearchSubmit}>
-      <input
-        type="text"
-        placeholder="Enter your search term"
-        value={searchTerm}
-        onChange={handleSearchChange}
-        className="search-input"
-        id="searchTerm" // Add an id attribute
-        name="searchTerm" // Add a name attribute
-      />
-      <button type="submit" className="search-button">Search</button>
-    </form>
-  );
-};
-
-// Define the SearchPage component
 const SearchPage: React.FC = () => {
-  // Define state for matching products
-  const [matchingProducts, setMatchingProducts] = useState<any[]>([]);
-  // Define state for selected product
-  const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [matchingProducts, setMatchingProducts] = useState<Product[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  // Event handler for search
+  useEffect(() => {
+    fetchProducts(); // Fetch all products initially
+  }, []); // Run once on component mount
+
+  const fetchProducts = async () => {
+    const firestore = getFirestore();
+    const categories = ['shoes', 'bottoms', 'tops', 'accessories'];
+    const allProducts: Product[] = [];
+
+    for (const category of categories) {
+      const q = query(collection(firestore, category));
+      const querySnapshot = await getDocs(q);
+
+      querySnapshot.forEach((doc) => {
+        const productData: DocumentData = doc.data();
+        allProducts.push({
+          id: doc.id,
+          name: productData.name,
+          description: productData.description,
+          price: productData.price,
+          imageSrc: productData.imageSrc,
+        });
+      });
+    }
+
+    setMatchingProducts(allProducts);
+  };
+
   const handleSearch = async (term: string) => {
-    // Perform search operation with term
-    console.log('Searching for:', term);
-    
-    try {
-      const firestore = getFirestore(); // Get Firestore instance
+    console.log('Search term:', term);
+    setSearchTerm(term);
+    const firestore = getFirestore();
+    const filteredProducts: Product[] = [];
 
-      // Array to store matching products
-      const products: any[] = [];
-
-      // Query each category collection separately
+    if (term.trim() !== '') {
+      console.log('Performing search...');
       const categories = ['shoes', 'bottoms', 'tops', 'accessories'];
+
       for (const category of categories) {
-        const q = query(collection(firestore, category), where('name', '>=', term));
+        const q = query(collection(firestore, category), where('name', '>=', term.toLowerCase()));
         const querySnapshot = await getDocs(q);
 
         querySnapshot.forEach((doc) => {
-          // Extract product data
-          const productData = doc.data();
-          products.push({
-            id: doc.id, // Include document ID
-            ...productData, // Spread other fields
-          });
+          const productData: DocumentData = doc.data();
+          const productName = productData.name.toLowerCase();
+          if (productName.includes(term.toLowerCase())) {
+            filteredProducts.push({
+              id: doc.id,
+              name: productData.name,
+              description: productData.description,
+              price: productData.price,
+              imageSrc: productData.imageSrc,
+            });
+          }
         });
       }
-
-      console.log('Matching Products:', products); // Log the products array
-      setMatchingProducts(products);
-    } catch (error) {
-      console.error('Error searching for products:', error);
+    } else {
+      console.log('Search term is empty, fetching all products...');
+      fetchProducts(); // Fetch all products when search term is empty
     }
+
+    console.log('Matching products:', filteredProducts);
+    setMatchingProducts(filteredProducts);
   };
 
-  // Function to handle product selection
-  const handleProductSelect = (product: any) => {
+  const handleProductSelect = (product: Product) => {
     setSelectedProduct(product);
   };
 
@@ -93,34 +92,41 @@ const SearchPage: React.FC = () => {
         <Link to="/SearchPage" className="search-icon">
           <FaSearch />
         </Link>
-        <Link to="/" className="home-icon">
+        <Link to="/HomePage" className="home-icon">
           <FaHome />
         </Link>
         <FaShoppingCart className="cart-icon" />
         <FaHeart className="heart-icon" />
         <FaUser className="user-icon" />
       </div>
-      <SearchBar onSearch={handleSearch} />
-      {/* Render matching products here */}
+      <form className="search-form" onSubmit={(e) => { e.preventDefault(); handleSearch(searchTerm); }}>
+        <input
+          type="text"
+          placeholder="Enter your search term"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-input"
+          id="searchTerm"
+          name="searchTerm"
+        />
+        <button type="submit" className="search-button">Search</button>
+      </form>
       <div className="matching-products">
         {matchingProducts.map((product, index) => (
           <div key={index} className="product" onClick={() => handleProductSelect(product)}>
             <p>{product.name}</p>
             <p>Description: {product.description}</p>
             <p>Price: ${product.price}</p>
-            <img src={product.imageSrc} alt={product.name} />
-            {/* Add more details or formatting for product display */}
+            <img src={product.imageSrc} alt={product.name} style={{ width: '100px', height: '100px' }} />
           </div>
         ))}
       </div>
-      {/* Render selected product details */}
       {selectedProduct && (
         <div className="selected-product">
           <h2>{selectedProduct.name}</h2>
           <p>Description: {selectedProduct.description}</p>
           <p>Price: ${selectedProduct.price}</p>
-          <img src={selectedProduct.imageSrc} alt={selectedProduct.name} />
-          {/* Render additional product details */}
+          <img src={selectedProduct.imageSrc} alt={selectedProduct.name} style={{ width: '200px', height: '200px' }} />
         </div>
       )}
     </div>
