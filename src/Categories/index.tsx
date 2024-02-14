@@ -15,7 +15,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ categoryName }) => {
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault(); 
     console.log("Category Name:", categoryName); // Log categoryName to verify it's not empty
     try {
       await addProduct(name, imageSrc, description, parseFloat(price), selectedCategory);
