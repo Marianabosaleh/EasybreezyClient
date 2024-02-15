@@ -88,34 +88,47 @@ export async function loginCustomer(email, password) {
     throw error; // Rethrow error for handling in UI
   }
 }
-export async function registerAgent(firstName, lastName, dateOfBirth, email, password, shopName, description) {
+// Firebase.ts
+
+export async function registerAgent(firstName, lastName, dateOfBirth, email, password, description) {
   try {
-    // Create user with email and password
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // Update user profile with first and last name
     await updateProfile(user, {
       displayName: `${firstName} ${lastName}`,
     });
 
-    // Add agent data to the "agents" collection in Firestore
+    const shopName = await createShopForAgent(user.uid, description); // Create a function to associate a shop with the agent
+    
     const agentData = {
       firstName: firstName,
       lastName: lastName,
       dateOfBirth: dateOfBirth,
       email: email,
       userType: "Agent",
-      shopName: shopName,
+      shopName: shopName, // Include the shop name in the agent data
       description: description,
     };
     await addDoc(collection(db, 'agents'), agentData);
 
     console.log("Agent registered successfully");
-    return user;
+    return shopName; // Return the shop name after successful registration
   } catch (error) {
     console.error("Registration error: ", error.message);
-    throw error; // Rethrow error for handling in UI
+    throw error;
+  }
+}
+
+async function createShopForAgent(agentId, description) {
+  try {
+    // Logic to create a shop associated with the agent
+    // For example, you can create a new document in a 'shops' collection and return its ID
+    const shopId = 'your_generated_shop_id';
+    return shopId;
+  } catch (error) {
+    console.error("Error creating shop:", error.message);
+    throw error;
   }
 }
 
@@ -144,13 +157,14 @@ export async function loginAgent(email, password) {
 
 }
 
-export async function addProduct(name, imageSrc, description, price, categoryName) {
+export async function addProduct(name, imageSrc, description, price, categoryName, shopName) {
   try {
     const productData = {
       name: name,
       imageSrc: imageSrc,
       description: description,
       price: price,
+      shopName: shopName // Include the shop name in the product data
     };
     await addDoc(collection(db, categoryName), productData); // Use the provided category name
     console.log("Product added successfully");
@@ -159,4 +173,6 @@ export async function addProduct(name, imageSrc, description, price, categoryNam
     throw error; // Rethrow error for handling in UI
   }
 }
+
+export { getFirestore };
 

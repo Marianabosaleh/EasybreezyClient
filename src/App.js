@@ -14,7 +14,8 @@ import AccessoriesPage from "./Categories/Accessories/Accessoriespage";
 import CartPage from "./Cart/CartPage";
 import FavoritesPage from "./favorites/FavoritesPage";
 import SearchPage from "./Searchpage/SearchPage";
-import AddProductForm from './Categories/index';
+import AddProductForm from './shop/index';
+import ShopPage from "./shop/shopPage";
 
 
 function App() {
@@ -37,7 +38,7 @@ function App() {
         <Route path="/FavoritesPage" element={<FavoritesPage/>} />
         <Route path="/SearchPage" element={<SearchPage/>}/>
         <Route path="/AddProductForm" element={<AddProductForm/>}/>
-
+        <Route path="/ShopPage" element={<ShopPage/>}/>
       </Routes>
     </Router>
   );
