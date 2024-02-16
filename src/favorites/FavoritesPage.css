@@ -30,6 +30,11 @@
   .favorite-price {
     color: #666; /* Dim color for price */
   }
+
+  .favorite-image {
+    max-width: 100px; /* Adjust the maximum width as needed */
+    max-height: 100px; /* Adjust the maximum height as needed */
+  }
   
   .favorite-button {
     background-color: #ccc; /* Light gray background */

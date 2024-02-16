@@ -19,6 +19,12 @@
     align-items: center;
   }
   
+  .cart-image {
+    max-width: 100px; /* Adjust the maximum width as needed */
+    max-height: 100px; /* Adjust the maximum height as needed */
+  }
+  
+
   .cart-name {
     font-weight: bold;
   }
