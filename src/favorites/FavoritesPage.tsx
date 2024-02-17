@@ -29,7 +29,7 @@ const FavoritesPage: React.FC = () => {
     };
 
     fetchFavoritesItems();
-  }, [auth]); // Include auth as a dependency to re-run the effect when authentication state changes
+  }, [auth]); // Include auth as a dependency to re-run the effect when authentication state changesss
 
   const handleRemoveFromFavorites = async (index: number) => {
     console.log('Removing item at index:', index);
