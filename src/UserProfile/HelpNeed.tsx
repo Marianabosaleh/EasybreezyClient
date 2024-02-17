@@ -15,7 +15,6 @@ const NeedHelpPage: React.FC = () => {
         </ol>
         <p>Once completed, you'll receive an order confirmation , Have A Nice Day !</p>
       </section>
-
       {/* Add other sections as needed, following the structure above */}
 
     </div>

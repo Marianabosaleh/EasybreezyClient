@@ -3,7 +3,6 @@ import { getFirestore, collection, getDocs, where, query } from 'firebase/firest
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { format } from 'date-fns';
 import { FaHome } from 'react-icons/fa';
-import { useNavigate } from "react-router-dom";
 
 interface Agent {
   id: string;
