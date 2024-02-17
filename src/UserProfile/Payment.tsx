@@ -51,6 +51,12 @@ const PaymentForm: React.FC = () => {
       return;
     }
 
+    // Check if any payment or address field is empty
+    if (!visaNumber || !cvv || !expirationDate || !street || !city || !zipCode) {
+      alert('Please fill in all the required fields.');
+      return;
+    }
+
     try {
       // Get a reference to the 'payments' collection in Firestore
       const paymentsCollectionRef = collection(getFirestore(), 'payments');
@@ -72,27 +78,19 @@ const PaymentForm: React.FC = () => {
         zipCode,
       });
 
-      // Set submitted data
+      // Remove the user-entered details from the state
       setSubmittedData({
         payment: {
-          visaNumber,
-          cvv,
-          expirationDate,
+          visaNumber: '',
+          cvv: '',
+          expirationDate: '',
         },
         address: {
-          street,
-          city,
-          zipCode,
+          street: '',
+          city: '',
+          zipCode: '',
         },
       });
-
-      // Reset form fields
-      setVisaNumber('');
-      setCvv('');
-      setExpirationDate('');
-      setStreet('');
-      setCity('');
-      setZipCode('');
 
       console.log('Payment and address data updated in Firestore!');
     } catch (error) {
@@ -121,18 +119,23 @@ const PaymentForm: React.FC = () => {
 
     fetchPaymentDetails();
   }, []);
+
   const goToHomePage = () => {
     window.location.href = '/HomePage';
   };
-
   return (
     <div>
       <form onSubmit={handleSubmit}>
+        {/* Payment section */}
         <label>
-        <br></br>
-        <div style={{ borderBottom: '1px solid #000', paddingBottom: '8px' }}>
-        <MdPayment style={{ marginRight: '8px', fontSize: '24px', fontWeight: 'bold' }} /> Payment
-        </div><br></br>
+          <br></br>
+          <div style={{ borderBottom: '1px solid #000', paddingBottom: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <MdPayment style={{ marginRight: '8px', fontSize: '24px', fontWeight: 'bold' }} />
+          <span style={{ fontSize: '19px' }}>Payment</span>
+          </div>          
+          </div>
+          <br></br>
           <i className="fas fa-credit-card"></i> Visa Number: <br></br>
           <input
             type="text"
@@ -161,9 +164,15 @@ const PaymentForm: React.FC = () => {
           />
         </label>
         <br></br><br></br>
+
+        {/* Address section */}
         <div style={{ borderBottom: '1px solid #000', paddingBottom: '8px' }}>
-       <MdOutlineAddHome style={{ marginRight: '8px', fontSize: '24px', fontWeight: 'bold' }} />Address
-        </div><br></br>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <MdOutlineAddHome style={{ marginRight: '8px', fontSize: '25px', fontWeight: 'bold' }} />
+        <span style={{ fontSize: '19px' }}>Shipping Address</span>
+        </div>
+        </div>
+        <br></br>
         <label>
           <i className="fas fa-map-marker-alt"></i> Street:
           <input
@@ -191,23 +200,11 @@ const PaymentForm: React.FC = () => {
           />
         </label>
         <br />
-        <button type="submit">Save</button>
+        <br></br>
+        <button type="submit">Place Order</button>
       </form>
       <br></br>
-      <FaHome onClick={goToHomePage} style={{ cursor: 'pointer' }} />
-      {submittedData.payment && submittedData.address && (
-        <div>
-          <h2>Submitted Payment Data:</h2>
-          <p>Visa Number: {submittedData.payment.visaNumber}</p>
-          <p>CVV: {submittedData.payment.cvv}</p>
-          <p>Expiration Date: {submittedData.payment.expirationDate}</p>
-
-          <h2>Submitted Address Data:</h2>
-          <p>Street: {submittedData.address.street}</p>
-          <p>City: {submittedData.address.city}</p>
-          <p>Zip Code: {submittedData.address.zipCode}</p>
-        </div>
-      )}
+      <FaHome onClick={goToHomePage} style={{ cursor: 'pointer', marginTop: '20px', height: '25px', width: '35px' }} />
     </div>
   );
 };
