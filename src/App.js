@@ -22,8 +22,7 @@ import CartPage from "./Cart/CartPage";
 import FavoritesPage from "./favorites/FavoritesPage";
 import SearchPage from "./Searchpage/SearchPage";
 import AddProductForm from './Categories/index';
-
-
+import OrdersHistory from "./UserProfile/OrderHistory";
 function App() {
   return (
     <Router>
@@ -51,7 +50,7 @@ function App() {
         <Route path="/FavoritesPage" element={<FavoritesPage/>} />
         <Route path="/SearchPage" element={<SearchPage/>}/>
         <Route path="/AddProductForm" element={<AddProductForm/>}/>
-
+        <Route path="/ordershistory" element={<OrdersHistory/>}/>
       </Routes>
     </Router>
   );

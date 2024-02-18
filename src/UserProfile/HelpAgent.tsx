@@ -1,6 +1,11 @@
 import React from 'react';
+import { FaHome } from 'react-icons/fa';
 
 const NeedHelpAgent: React.FC = () => {
+  function goToHomePage() {
+    // Perform redirection here
+    window.location.href = '/HomePage'; 
+  }
   return (
     <div>
       <h1>Need Help ? </h1>
@@ -50,6 +55,7 @@ const NeedHelpAgent: React.FC = () => {
           If you encounter any issues or need additional assistance, please contact the technical support team.
         </p>
       </section>
+      <FaHome style={{ cursor: 'pointer', marginTop: '25px', height: '30px', width: '55px' }} onClick={goToHomePage} />
     </div>
 
   );

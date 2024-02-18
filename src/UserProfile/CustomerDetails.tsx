@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getFirestore, collection, getDocs, where, query } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { format } from 'date-fns';
+import { FaHome } from 'react-icons/fa';
 
 interface Customer {
   id: string;
@@ -73,7 +74,10 @@ const CustomerDetailsPage: React.FC = () => {
       return 'Invalid Date';
     }
   };
-
+  function goToHomePage() {
+    // Perform redirection here
+    window.location.href = '/HomePage'; 
+  }
   return (
     <div className="matching-customers">
       {matchingCustomers.map((customer) => (
@@ -92,7 +96,8 @@ const CustomerDetailsPage: React.FC = () => {
           <p>Date of Birth: {formatDate(selectedCustomer.dateOfBirth)}</p>
         </div>
       )}
-    </div>
+      <FaHome onClick={goToHomePage} style={{ cursor: 'pointer' }} />
+      </div>
   );
 };
 

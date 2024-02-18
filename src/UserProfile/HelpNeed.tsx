@@ -1,6 +1,11 @@
 import React from 'react';
+import { FaHome } from 'react-icons/fa';
 
 const NeedHelpPage: React.FC = () => {
+  function goToHomePage() {
+    // Perform redirection here
+    window.location.href = '/HomePage'; 
+  }
   return (
     <div>
       <h1>Need Help ? </h1>
@@ -16,7 +21,7 @@ const NeedHelpPage: React.FC = () => {
         <p>Once completed, you'll receive an order confirmation , Have A Nice Day !</p>
       </section>
       {/* Add other sections as needed, following the structure above */}
-
+      <FaHome style={{ cursor: 'pointer', marginTop: '25px', height: '30px', width: '55px' }} onClick={goToHomePage} />
     </div>
   );
 };

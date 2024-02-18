@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { IoList, IoHelpCircleOutline } from 'react-icons/io5';
 import { ImProfile } from 'react-icons/im';
-import { MdPayment } from 'react-icons/md';
 import { BsBoxArrowLeft } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import { FaHome } from 'react-icons/fa';
 import { getFirestore, collection, getDocs, where, query } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
-import { format } from 'date-fns';
 
 import './profileC.css';
 
@@ -73,16 +71,6 @@ const CustomerProfilePage: React.FC = () => {
     setSelectedCustomer(customer);
   };
 
-  const formatDate = (dateString: string) => {
-    try {
-      const formattedDate = format(new Date(dateString), 'MMMM dd, yyyy');
-      return formattedDate;
-    } catch (error) {
-      console.error('Error formatting date:', error);
-      return 'Invalid Date';
-    }
-  };
-
   const navigate = useNavigate();
 
   const goToHomePage = () => {
@@ -94,14 +82,11 @@ const CustomerProfilePage: React.FC = () => {
       <h3>Hello, {currentUser ? currentUser.displayName : 'Guest'}</h3>
       <div className="main-container">
         <div className="left-nav">
-          <Link to="#">
+          <Link to="/ordershistory">
             <IoList style={{ marginRight: '8px' }} /> My Orders
           </Link>
           <Link to="/customerdetails">
             <ImProfile style={{ marginRight: '8px' }} /> My Details
-          </Link>
-          <Link to="/paymentmethod">
-            <MdPayment style={{ marginRight: '8px' }} /> Payment Method
           </Link>
           <Link to="/NeedHelpPage">
             <IoHelpCircleOutline style={{ marginRight: '8px' }} />Need Help
