@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { updateProfile } from "firebase/auth";
-import { getFirestore, collection, addDoc,  query, where, getDocs, doc , getDoc , setDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc,  query, where, getDocs, doc , getDoc , setDoc , serverTimestamp } from "firebase/firestore";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -65,6 +65,12 @@ export async function Registercustomer(firstName, lastName, dateOfBirth, email, 
       items: [],
     };
     await addDoc(collection(db, 'carts'), { userId: user.uid, cartData });
+
+    // Automatically create a cart for the customer
+    const orderData = {
+      items: [],
+    };
+    await addDoc(collection(db, 'orders'), { userId: user.uid, orderData });
 
     // Automatically create a favorites collection for the customer
     const favoritesData = {
@@ -390,3 +396,21 @@ export async function getFavoriteItems(userId) {
     throw error;
   }
 }
+// Function to add an order to Firestore
+export const addOrder = async (userId, selectedProducts) => {
+  const db = getFirestore();
+
+  try {
+    // Create a new order document with user ID, timestamp, and selected products
+    const orderDocRef = await addDoc(collection(db, 'users', userId, 'orders'), {
+      userId: userId,
+      timestamp: serverTimestamp(),
+      products: selectedProducts,
+    });
+
+    console.log('Order added with ID: ', orderDocRef.id);
+  } catch (error) {
+    console.error('Error adding order: ', error);
+    throw new Error('Failed to add order to Firestore');
+  }
+};
