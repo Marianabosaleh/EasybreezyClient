@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { updateProfile } from "firebase/auth";
-import { getFirestore, collection, addDoc,  query, where, getDocs, doc , getDoc , setDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc,  query, where, getDocs, doc , getDoc , setDoc , serverTimestamp } from "firebase/firestore";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -66,7 +66,19 @@ export async function Registercustomer(firstName, lastName, dateOfBirth, email, 
     };
     await addDoc(collection(db, 'carts'), { userId: user.uid, cartData });
 
-    console.log("User registered successfully as customer with an initialized cart");
+    // Automatically create a cart for the customer
+    const orderData = {
+      items: [],
+    };
+    await addDoc(collection(db, 'orders'), { userId: user.uid, orderData });
+
+    // Automatically create a favorites collection for the customer
+    const favoritesData = {
+      items: [],
+    };
+    await addDoc(collection(db, 'favorites'), { userId: user.uid, favoritesData });
+
+    console.log("User registered successfully as customer");
     return user;
   } catch (error) {
     console.error("Registration error: ", error.message);
@@ -135,8 +147,14 @@ export async function registerAgent(firstName, lastName, dateOfBirth, email, pas
       items: [],
     };
     await addDoc(collection(db, 'carts'), { userId: user.uid, cartData });
+    // Automatically create a favorites collection for the customer
+    const favoritesData = {
+      items: [],
+    };
+    await addDoc(collection(db, 'favorites'), { userId: user.uid, favoritesData });
 
-    console.log("Agent registered successfully with an initialized cart");
+
+    console.log("Agent registered successfully");
     return user;
   } catch (error) {
     console.error("Registration error: ", error.message);
@@ -188,11 +206,16 @@ export async function addProduct(name, imageSrc, description, price, categoryNam
 // ///////////////////////////////////////////////////////////////////////////////////////////
 
 
-export async function addToCart(productData, userId) {
+export async function addToCart(productData) {
   try {
-    if (!userId) {
-      throw new Error('User ID is not provided');
+    const auth = getAuth(); // Get the authentication instance
+    const currentUser = auth.currentUser; // Get the currently authenticated user
+
+    if (!currentUser) {
+      throw new Error('User is not authenticated');
     }
+
+    const userId = currentUser.uid; // Get the user ID
 
     // Reference the user's cart document using the user's UID
     const cartRef = doc(db, 'carts', userId);
@@ -229,6 +252,27 @@ export async function addToCart(productData, userId) {
   }
 }
 
+// Function to remove item from cart
+export async function removeFromCart(userId, index) {
+  try {
+    const cartRef = doc(db, 'carts', userId);
+    const cartDoc = await getDoc(cartRef);
+
+    if (!cartDoc.exists()) {
+      throw new Error('Cart does not exist');
+    }
+
+    const updatedCartItems = cartDoc.data().items.filter((_, i) => i !== index);
+    await setDoc(cartRef, { items: updatedCartItems });
+
+    console.log('Item removed from cart successfully');
+  } catch (error) {
+    console.error('Error removing item from cart:', error.message);
+    throw error;
+  }
+}
+
+
 export async function getCartItems(userId) {
   try {
     // Reference the user's cart document using the user's UID
@@ -254,3 +298,119 @@ export async function getCartItems(userId) {
     throw error;
   }
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+// Function to add item to favorites
+export async function addToFavorites(productData) {
+  try {
+    const auth = getAuth(); // Get the authentication instance
+    const currentUser = auth.currentUser; // Get the currently authenticated user
+
+    if (!currentUser) {
+      throw new Error('User is not authenticated');
+    }
+
+    const userId = currentUser.uid; // Get the user ID
+
+    // Reference the user's favorites document using the user's UID
+    const favoritesRef = doc(db, 'favorites', userId);
+    
+    // Check if the favorites document exists, create it if it doesn't
+    let favoritesDoc = await getDoc(favoritesRef);
+    if (!favoritesDoc.exists()) {
+      // Favorites document doesn't exist, create it
+      const initialFavoritesData = { items: [] };
+      await setDoc(favoritesRef, initialFavoritesData);
+
+      // Fetch the newly created favorites document
+      favoritesDoc = await getDoc(favoritesRef);
+    }
+
+    // Log the favorites data to see if it's correctly fetched
+    console.log('Favorites data:', favoritesDoc.data());
+
+    // Check if favorites data or items are undefined
+    if (!favoritesDoc.data() || !favoritesDoc.data().items) {
+      throw new Error('Favorites data or items are undefined');
+    }
+
+    // Update the favorites with the new item
+    const updatedFavorites = {
+      items: [...favoritesDoc.data().items, productData]
+    };
+    await setDoc(favoritesRef, updatedFavorites);
+
+    console.log('Item added to favorites successfully');
+  } catch (error) {
+    console.error('Error adding item to favorites:', error.message);
+    throw error;
+  }
+}
+
+// Function to remove item from favorites
+export async function removeFromFavorites(userId, index) {
+  try {
+    // Reference the user's favorites document using the user's UID
+    const favoritesRef = doc(db, 'favorites', userId);
+    const favoritesDoc = await getDoc(favoritesRef);
+
+    if (!favoritesDoc.exists()) {
+      throw new Error('Favorites document does not exist');
+    }
+
+    const updatedFavoritesItems = favoritesDoc.data().items.filter((_, i) => i !== index);
+    await setDoc(favoritesRef, { items: updatedFavoritesItems });
+
+    console.log('Item removed from favorites successfully');
+  } catch (error) {
+    console.error('Error removing item from favorites:', error.message);
+    throw error;
+  }
+}
+
+// Function to get favorite items
+export async function getFavoriteItems(userId) {
+  try {
+    // Reference the user's favorites document using the user's UID
+    const favoritesRef = doc(db, 'favorites', userId);
+    
+    // Fetch the favorites document
+    let favoritesDoc = await getDoc(favoritesRef);
+
+    // Check if the favorites document exists
+    if (!favoritesDoc.exists()) {
+      // Favorites document doesn't exist, create it
+      const initialFavoritesData = { items: [] };
+      await setDoc(favoritesRef, initialFavoritesData);
+
+      // Fetch the newly created favorites document
+      favoritesDoc = await getDoc(favoritesRef);
+    }
+
+    // Return the array of items in favorites
+    return favoritesDoc.data().items || [];
+  } catch (error) {
+    console.error('Error fetching favorite items:', error.message);
+    throw error;
+  }
+}
+// Function to add an order to Firestore
+export const addOrder = async (userId, selectedProducts) => {
+  const db = getFirestore();
+
+  try {
+    // Create a new order document with user ID, timestamp, and selected products
+    const orderDocRef = await addDoc(collection(db, 'users', userId, 'orders'), {
+      userId: userId,
+      timestamp: serverTimestamp(),
+      products: selectedProducts,
+    });
+
+    console.log('Order added with ID: ', orderDocRef.id);
+  } catch (error) {
+    console.error('Error adding order: ', error);
+    throw new Error('Failed to add order to Firestore');
+  }
+};

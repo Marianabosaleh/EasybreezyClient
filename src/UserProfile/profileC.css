@@ -1,0 +1,27 @@
+/* profileC.css */
+
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 800px; /* Adjust the max-width as needed */
+    margin: 0 auto;
+  }
+  
+  .left-nav {
+    background-color: #FCEEE4; /* Adjust the background color as needed */
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(219, 3, 3, 0.1); /* Add a box shadow for a subtle effect */
+  }
+  
+  .left-nav a {
+    display: block;
+    color: #030303; /* Adjust the text color as needed */
+    text-decoration: none;
+    margin-bottom: 12px;
+    font-size: 16px; /* Adjust the font size as needed */
+  }
+  
+  .left-nav a:hover {
+    color: #b616b6; /* Adjust the hover color as needed */
+  }
