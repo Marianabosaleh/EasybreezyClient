@@ -9,8 +9,6 @@ const Welcome: React.FC = () => {
   return (
     <div className="welcome-container">
       <img src={logo} alt="Logo" className="logo" />
-      <h1>Welcome to Your App</h1>
-      
       <Stack direction="column" spacing={2}>
         <Link to="/LoginCustomer" style={{ textDecoration: 'none' }}>
           <Button variant="contained" style={{ backgroundColor: 'black', color: 'white' }}>Customer</Button>

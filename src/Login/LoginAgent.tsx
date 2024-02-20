@@ -9,22 +9,21 @@ const LoginAgent: React.FC = () => {
   const [error, setError] = useState("");
 
   function login() {
-    // Clear previous errors
     setError("");
-
+  
     loginAgent(email, password)
-      .then(() => {
-        // Redirect the user to the home page or another page upon successful login
-        redirectToHomePage(); // Redirect to the homepage
+      .then(({ user, shopName }) => {
+        // Redirect to the home page with shop name
+        redirectToshoppage(shopName);
       })
       .catch((errorMessage) => {
-        setError(errorMessage.message); // Render the error message instead of the error object itself
+        setError(errorMessage.message);
       });
   }
 
-  function redirectToHomePage() {
-    // Perform redirection here
-    window.location.href = '/HomePage'; 
+  function redirectToshoppage(shopName: string) {
+    // Redirect the user to the home page with shop name
+    window.location.href = `/ShopPage?shopName=${encodeURIComponent(shopName)}`;
   }
 
   return (
