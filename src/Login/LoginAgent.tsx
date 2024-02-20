@@ -14,16 +14,17 @@ const LoginAgent: React.FC = () => {
     loginAgent(email, password)
       .then(({ user, shopName }) => {
         // Redirect to the home page with shop name
-        redirectToshoppage(shopName);
+        redirectToHomePage();
       })
       .catch((errorMessage) => {
         setError(errorMessage.message);
       });
   }
 
-  function redirectToshoppage(shopName: string) {
-    // Redirect the user to the home page with shop name
-    window.location.href = `/ShopPage?shopName=${encodeURIComponent(shopName)}`;
+
+  function redirectToHomePage() {
+    // Perform redirection here
+    window.location.href = '/HomePage'; 
   }
 
   return (

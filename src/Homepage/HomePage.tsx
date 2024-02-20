@@ -116,10 +116,6 @@ const HomePage: React.FC = () => {
           <img src={T_SHIRT} alt="tops" className="category-image" />
           <p className="category-name">Tops</p>
         </Link>
-        <Link to="/AddProductForm" className="category-container">
-          <img src={T_SHIRT} alt="tops" className="category-image" />
-          <p className="category-name">add</p>
-        </Link>
       </div>
 
       {/* Icons */}
