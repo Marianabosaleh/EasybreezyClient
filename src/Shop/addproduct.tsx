@@ -16,35 +16,35 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ shopName, categoryName 
   const categories = ['tops', 'bottoms', 'shoes', 'accessories'];
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-  
-    // Additional check to ensure shopName and selectedCategory are not empty
-    if (!selectedCategory || !shopName) {
-      console.error("Selected category or shop name is undefined.");
-      setErrorMessage("Selected category or shop name is undefined. Please select a valid category and ensure shop name is provided.");
-      return;
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  // Additional check to ensure shopName and selectedCategory are not empty
+  if (!selectedCategory || !shopName) {
+    console.error("Selected category or shop name is undefined.");
+    setErrorMessage("Selected category or shop name is undefined. Please select a valid category and ensure shop name is provided.");
+    return;
+  }
+
+  try {
+    await addProduct(name, imageSrc, description, parseFloat(price), selectedCategory, shopName);
+    // Reset form fields after successful addition
+    setName('');
+    setImageSrc('');
+    setDescription('');
+    setPrice('');
+    setSelectedCategory(categoryName || ''); // Reset to the initial state or keep the category if predefined
+    setErrorMessage('');
+  } catch (error: unknown) {
+    let errorMessage = 'An unexpected error occurred';
+    if (error instanceof Error) {
+      errorMessage = error.message;
     }
-  
-    try {
-      await addProduct(name, imageSrc, description, parseFloat(price), selectedCategory, shopName);
-      // Reset form fields after successful addition
-      setName('');
-      setImageSrc('');
-      setDescription('');
-      setPrice('');
-      setSelectedCategory(categoryName || ''); // Reset to the initial state or keep the category if predefined
-      setErrorMessage('');
-    } catch (error: unknown) {
-      let errorMessage = 'An unexpected error occurred';
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-      console.error(`Error adding product:`, errorMessage);
-      setErrorMessage(errorMessage);
-    }
-  };
-  
+    console.error(`Error adding product:`, errorMessage);
+    setErrorMessage(errorMessage);
+  }
+};
+
 
   return (
     <div>

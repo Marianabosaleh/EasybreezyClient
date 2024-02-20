@@ -21,8 +21,13 @@ import AccessoriesPage from "./Categories/Accessories/Accessoriespage";
 import CartPage from "./Cart/CartPage";
 import FavoritesPage from "./favorites/FavoritesPage";
 import SearchPage from "./Searchpage/SearchPage";
-import AddProductForm from './Categories/index';
+import AddProductForm from "./Shop/addproduct";
 import OrdersHistory from "./UserProfile/OrderHistory";
+import AgentShoesPage from "./Shop/shoes/shoepage";
+import AgentBottomsPage from "./Shop/bottoms/bottomspage";
+import AgentTopsPage from "./Shop/tops/toppage";
+import AgentAccessoriesPage from "./Shop/Accessories/Accessoriespage";
+import ShopPage from "./Shop/shopPage";
 function App() {
   return (
     <Router>
@@ -51,6 +56,11 @@ function App() {
         <Route path="/SearchPage" element={<SearchPage/>}/>
         <Route path="/AddProductForm" element={<AddProductForm/>}/>
         <Route path="/ordershistory" element={<OrdersHistory/>}/>
+        <Route path="/ShopPage" element={<ShopPage/>}/>
+        <Route path="/AgentShoesPage" element={<AgentShoesPage/>} />
+        <Route path="/AgentBottomsPage" element={<AgentBottomsPage/>} />
+        <Route path="/AgentTopsPage" element={<AgentTopsPage/>} />
+        <Route path="/AgentAccessoriesPage" element={<AgentAccessoriesPage/>} />
       </Routes>
     </Router>
   );

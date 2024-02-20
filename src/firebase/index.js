@@ -114,7 +114,7 @@ export async function loginCustomer(email, password) {
 }
 
 // Function to register a new agent
-export async function registerAgent(firstName, lastName, dateOfBirth, email, password, shopName, description) {
+export async function registerAgent(firstName, lastName, dateOfBirth, email, password, shopName, description, defaultCategories = []) {
   try {
     // Basic data validation
     if (!firstName || !lastName || !dateOfBirth || !email || !password || !shopName || !description) {
@@ -147,14 +147,23 @@ export async function registerAgent(firstName, lastName, dateOfBirth, email, pas
       items: [],
     };
     await addDoc(collection(db, 'carts'), { userId: user.uid, cartData });
-    // Automatically create a favorites collection for the customer
-    const favoritesData = {
-      items: [],
+
+    // Additionally, create a shop collection entry for the agent
+    const shopData = {
+      ownerId: user.uid, // Link shop to the agent/user
+      shopName: shopName,
+      description: description,
+      items: [], // Initially, there might not be any items
     };
-    await addDoc(collection(db, 'favorites'), { userId: user.uid, favoritesData });
+    const shopRef = await addDoc(collection(db, 'shops'), shopData);
 
+    // Initialize default categories for the shop
+    const categoryPromises = defaultCategories.map(categoryName =>
+      addDoc(collection(db, `shops/${shopRef.id}/categories`), { name: categoryName })
+    );
+    await Promise.all(categoryPromises);
 
-    console.log("Agent registered successfully");
+    console.log("Agent registered successfully with an initialized cart, shop, and default categories");
     return user;
   } catch (error) {
     console.error("Registration error: ", error.message);
@@ -162,7 +171,9 @@ export async function registerAgent(firstName, lastName, dateOfBirth, email, pas
   }
 }
 
+
 // Login an agent
+
 export async function loginAgent(email, password) {
   try {
     // Check if the provided email exists in the agents collection
@@ -178,28 +189,58 @@ export async function loginAgent(email, password) {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
+    // Retrieve the agent's shop name
+    const shopName = querySnapshot.docs[0].data().shopName;
+
     console.log('Successfully signed in:', user);
-    return user;
+    return { user, shopName };
   } catch (error) {
     console.error("Login error: ", error.message);
     throw error; // Rethrow error for handling in UI
   }
-
 }
 
-export async function addProduct(name, imageSrc, description, price, categoryName) {
+
+export async function addProduct(name, imageSrc, description, price, categoryName, shopName) {
+  if (!categoryName || !shopName) {
+    throw new Error("Category name or shop name is undefined.");
+  }
+
   try {
+    const db = getFirestore();
+
+    // First, find the shop by its name
+    const shopsRef = collection(db, 'shops');
+    const querySnapshot = await getDocs(query(shopsRef, where("shopName", "==", shopName)));
+    if (querySnapshot.empty) {
+      throw new Error(`Shop with name ${shopName} not found.`);
+    }
+    const shopDoc = querySnapshot.docs[0]; // Assuming shop names are unique
+
+    // Then, find the category ID within that shop
+    const categoriesRef = collection(db, `shops/${shopDoc.id}/categories`);
+    const categorySnapshot = await getDocs(query(categoriesRef, where("name", "==", categoryName)));
+    let categoryId = null;
+    if (!categorySnapshot.empty) {
+      categoryId = categorySnapshot.docs[0].id; // Assuming category names are unique within each shop
+    } else {
+      throw new Error(`Category with name ${categoryName} not found in shop ${shopName}.`);
+    }
+
+    // Finally, add the product to the items collection with a reference to the category ID
     const productData = {
-      name: name,
-      imageSrc: imageSrc,
-      description: description,
-      price: price,
+      name,
+      imageSrc,
+      description,
+      price,
+      categoryId, // Store the category ID instead of name
     };
-    await addDoc(collection(db, categoryName), productData); // Use the provided category name
-    console.log("Product added successfully");
+
+    await addDoc(collection(db, `shops/${shopDoc.id}/items`), productData);
+    console.log("Product added successfully to shop:", shopName);
   } catch (error) {
-    console.error(`Error adding ${categoryName} product: `, error.message);
-    throw error; // Rethrow error for handling in UI
+    console.error(`Error adding product to ${categoryName} in shop ${shopName}:`, error);
+    throw error;
   }
 }
 

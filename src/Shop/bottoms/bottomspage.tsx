@@ -3,7 +3,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import ShopPage from '../shopPage';
 import AddProductForm from '../addproduct';
-const BottomsPage = () => {
+const AgentBottomsPage = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [shopName, setShopName] = useState<string>(''); // Add state to store shopName if needed
 
@@ -37,4 +37,4 @@ const BottomsPage = () => {
   );
 };
 
-export default BottomsPage;
+export default AgentBottomsPage;

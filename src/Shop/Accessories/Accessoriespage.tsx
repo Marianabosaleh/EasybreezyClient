@@ -4,7 +4,7 @@ import { getFirestore, collection, query, where, getDocs } from 'firebase/firest
 import ShopPage from '../shopPage';
 import AddProductForm from '../addproduct';
 
-const AccessoriesPage  = () => {
+const AgentAccessoriesPage  = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [shopName, setShopName] = useState<string>(''); // Add state to store shopName if needed
 
@@ -39,4 +39,4 @@ const AccessoriesPage  = () => {
 };
 
 
-export default AccessoriesPage;
+export default AgentAccessoriesPage;
