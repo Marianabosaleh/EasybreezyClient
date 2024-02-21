@@ -8,36 +8,45 @@ import bottoms from '../Homepage/bottoms.jpg';
 import accessories from '../Homepage/accessories.jpg';
 import { FaHeart, FaUser, FaShoppingCart, FaHome, FaSearch } from 'react-icons/fa';
 
+
 interface Product {
-    id: string;
-    name: string;
-    imageSrc: string;
-    description: string;
-    price: number;
-    // Add any other product fields you have
+  id: string;
+  name: string;
+  imageSrc: string;
+  description: string;
+  price: number;
 }
 
 interface ShopPageProps {
-    shopId: string;
-    categoryName: string;
-  }
-  
-  const categories = [
-    { name: 'Shoes', path: '/AgentShoesPage', image: shoes },
-    { name: 'Bottoms', path: '/AgentBottomsPage', image: bottoms },
-    { name: 'Accessories', path: '/AgentAccessoriesPage', image: accessories },
-    { name: 'Tops', path: '/AgentTopsPage', image: T_SHIRT },
-  ];
-  
-  const ShopPage: React.FC<ShopPageProps> = ({ shopId, categoryName }) => {
-    const [products, setProducts] = useState<Product[]>([]);
-  
-    useEffect(() => {
-      const fetchProducts = async () => {
-        // Existing fetching logic remains unchanged
-      };
-      fetchProducts();
-    }, [shopId, categoryName]);
+  shopId: string;
+  categoryName?: string; // Make categoryName optional
+}
+
+const ShopPage: React.FC<ShopPageProps> = ({ shopId, categoryName }) => {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      if (!shopId || !categoryName) {
+        return; // If either shopId or categoryName is missing, don't fetch products
+      }
+      const db = getFirestore();
+      const productsRef = collection(db, `shops/${shopId}/items`);
+      const q = query(productsRef, where("categoryId", "==", categoryName));
+      
+      try {
+        const querySnapshot = await getDocs(q);
+        const productsData: Product[] = [];
+        querySnapshot.forEach((doc) => {
+          productsData.push({ id: doc.id, ...doc.data() } as Product);
+        });
+        setProducts(productsData);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchProducts();
+  }, [shopId, categoryName]);
   
   
   return (
@@ -77,15 +86,15 @@ interface ShopPageProps {
       </div>
       
     
-            <div className="product-container">
-                {products.length > 0 ? (
-                    products.map((product) => (
-                        <div key={product.id} className="product-item">
-                            <h2>{product.name}</h2>
-                            <img src={product.imageSrc} alt={product.name} />
-                            <p>{product.description}</p>
-                            <p>Price: ${product.price}</p>
-                        </div>
+      <div className="product-container">
+        {products.length > 0 ? (
+          products.map((product) => (
+            <div key={product.id} className="product-item">
+              <h2>{product.name}</h2>
+              <img src={product.imageSrc} alt={product.name} />
+              <p>{product.description}</p>
+              <p>Price: ${product.price}</p>
+            </div>
                     ))
                 ) : (
                     <p>No products found in your shop</p>
