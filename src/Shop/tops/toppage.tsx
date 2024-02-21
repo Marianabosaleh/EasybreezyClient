@@ -1,29 +1,35 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import ShopPage from '../shopPage';
-import AddProductForm from '../addproduct';
 
 const AgentTopsPage = () => {
   const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true); // Manage loading state
+  const navigate = useNavigate(); // For redirecting users
 
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setLoading(false); // Update loading state
       if (user) {
-        setUserId(user.uid);
+        setUserId(user.uid); // Set user ID if logged in
       } else {
-        setUserId(null);
+        // If no user is logged in, redirect or manage accordingly
+        navigate('/login'); // Example redirection to login page
       }
     });
-    return () => unsubscribe();
-  }, []);
+    return () => unsubscribe(); // Cleanup subscription on unmount
+  }, [navigate]);
 
-  return userId ? (
-    <ShopPage userId={userId} categoryName="tops" />
-  ) : (
-    <div>Loading or user not logged in...</div>
+  if (loading) {
+    return <div>Loading...</div>; // Display loading indicator
+  }
+
+  return (
+    // Only render ShopPage if not loading and user ID is available
+    userId ? <ShopPage shopId={userId} categoryName="Tops" /> : null
   );
 };
 
 export default AgentTopsPage;
-

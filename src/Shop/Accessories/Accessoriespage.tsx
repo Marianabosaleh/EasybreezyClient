@@ -6,10 +6,12 @@ import AddProductForm from '../addproduct';
 
 const AgentAccessoriesPage  = () => {
   const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true); // Added loading state
 
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setLoading(false); // Set loading to false regardless of user's presence
       if (user) {
         setUserId(user.uid);
       } else {
@@ -19,11 +21,17 @@ const AgentAccessoriesPage  = () => {
     return () => unsubscribe();
   }, []);
 
-  return userId ? (
-    <ShopPage userId={userId} categoryName="accessories" />
-  ) : (
-    <div>Loading or user not logged in...</div>
-  );
+  if (loading) {
+    return <div>Loading...</div>; // Now accurately represents loading state
+  }
+
+  if (!userId) {
+    // Improved handling for no user logged in
+    // You might consider redirecting to a login page or showing a login link here
+    return <div>Please log in to view this page.</div>;
+  }
+
+  return <ShopPage shopId={userId} categoryName="accessories" />;
 };
 
 export default AgentAccessoriesPage;

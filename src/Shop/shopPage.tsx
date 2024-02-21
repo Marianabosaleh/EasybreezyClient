@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+ import React, { useState, useEffect } from 'react';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import shoes from '../Homepage/shoes.jpg';
@@ -17,7 +18,7 @@ interface Product {
 }
 
 interface ShopPageProps {
-    userId: string;
+    shopId: string;
     categoryName: string;
   }
   
@@ -28,7 +29,7 @@ interface ShopPageProps {
     { name: 'Tops', path: '/AgentTopsPage', image: T_SHIRT },
   ];
   
-  const ShopPage: React.FC<ShopPageProps> = ({ userId, categoryName }) => {
+  const ShopPage: React.FC<ShopPageProps> = ({ shopId, categoryName }) => {
     const [products, setProducts] = useState<Product[]>([]);
   
     useEffect(() => {
@@ -36,7 +37,7 @@ interface ShopPageProps {
         // Existing fetching logic remains unchanged
       };
       fetchProducts();
-    }, [userId, categoryName]);
+    }, [shopId, categoryName]);
   
   
   return (
@@ -75,7 +76,7 @@ interface ShopPageProps {
 
       </div>
       
- 
+    
             <div className="product-container">
                 {products.length > 0 ? (
                     products.map((product) => (

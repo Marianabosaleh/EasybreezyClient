@@ -114,50 +114,40 @@ export async function loginCustomer(email, password) {
 }
 
 // Function to register a new agent
-export async function registerAgent(firstName, lastName, dateOfBirth, email, password, shopName, description, defaultCategories = []) {
+export async function registerAgent(firstName, lastName, dateOfBirth, email, password, shopName, description) {
   try {
-    // Basic data validation
     if (!firstName || !lastName || !dateOfBirth || !email || !password || !shopName || !description) {
       throw new Error("All fields are required for registration.");
     }
 
-    // Create user with email and password
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // Update user profile with first and last name
     await updateProfile(user, {
       displayName: `${firstName} ${lastName}`,
     });
 
-    // Add agent data to the "agents" collection in Firestore
-    const agentData = {
-      firstName: firstName,
-      lastName: lastName,
-      dateOfBirth: dateOfBirth,
-      email: email,
+    await addDoc(collection(db, 'agents'), {
+      firstName,
+      lastName,
+      dateOfBirth,
+      email,
       userType: "Agent",
-      shopName: shopName,
-      description: description,
-    };
-    await addDoc(collection(db, 'agents'), agentData);
+      shopName,
+      description,
+    });
 
-    // Automatically create a cart for the agent
-    const cartData = {
+    await addDoc(collection(db, 'carts'), { userId: user.uid, cartData: { items: [] } });
+
+    const shopRef = await addDoc(collection(db, 'shops'), {
+      ownerId: user.uid,
+      shopName,
+      description,
       items: [],
-    };
-    await addDoc(collection(db, 'carts'), { userId: user.uid, cartData });
+    });
 
-    // Additionally, create a shop collection entry for the agent
-    const shopData = {
-      ownerId: user.uid, // Link shop to the agent/user
-      shopName: shopName,
-      description: description,
-      items: [], // Initially, there might not be any items
-    };
-    const shopRef = await addDoc(collection(db, 'shops'), shopData);
-
-    // Initialize default categories for the shop
+    // Initialize with default categories
+    const defaultCategories = ['Tops', 'Bottoms', 'Shoes', 'Accessories'];
     const categoryPromises = defaultCategories.map(categoryName =>
       addDoc(collection(db, `shops/${shopRef.id}/categories`), { name: categoryName })
     );
@@ -167,7 +157,7 @@ export async function registerAgent(firstName, lastName, dateOfBirth, email, pas
     return user;
   } catch (error) {
     console.error("Registration error: ", error.message);
-    throw error; // Rethrow error for handling in UI
+    throw error;
   }
 }
 
@@ -200,49 +190,36 @@ export async function loginAgent(email, password) {
   }
 }
 
-
-export async function addProduct(name, imageSrc, description, price, categoryName, shopName) {
-  if (!categoryName || !shopName) {
-    throw new Error("Category name or shop name is undefined.");
+export async function addProduct(name, imageSrc, description, price, categoryName, shopId) {
+  if (!name || !imageSrc || !description || typeof price !== 'number' || isNaN(price) || price <= 0 || !categoryName || !shopId) {
+    throw new Error("Validation failed for input parameters.");
   }
 
   try {
     const db = getFirestore();
-
-    // First, find the shop by its name
-    const shopsRef = collection(db, 'shops');
-    const querySnapshot = await getDocs(query(shopsRef, where("shopName", "==", shopName)));
-    if (querySnapshot.empty) {
-      throw new Error(`Shop with name ${shopName} not found.`);
+    
+    // Here, ensure you are only using shopId to reference the shop
+    const categoriesRef = collection(db, `shops/${shopId}/categories`);
+    const categoryQuerySnapshot = await getDocs(query(categoriesRef, where("name", "==", categoryName)));
+    if (categoryQuerySnapshot.empty) {
+      throw new Error(`Category with name ${categoryName} not found in shop.`);
     }
-    const shopDoc = querySnapshot.docs[0]; // Assuming shop names are unique
+    const categoryId = categoryQuerySnapshot.docs[0].id;
 
-    // Then, find the category ID within that shop
-    const categoriesRef = collection(db, `shops/${shopDoc.id}/categories`);
-    const categorySnapshot = await getDocs(query(categoriesRef, where("name", "==", categoryName)));
-    let categoryId = null;
-    if (!categorySnapshot.empty) {
-      categoryId = categorySnapshot.docs[0].id; // Assuming category names are unique within each shop
-    } else {
-      throw new Error(`Category with name ${categoryName} not found in shop ${shopName}.`);
-    }
-
-    // Finally, add the product to the items collection with a reference to the category ID
-    const productData = {
+    await addDoc(collection(db, `shops/${shopId}/items`), {
       name,
       imageSrc,
       description,
       price,
-      categoryId, // Store the category ID instead of name
-    };
-
-    await addDoc(collection(db, `shops/${shopDoc.id}/items`), productData);
-    console.log("Product added successfully to shop:", shopName);
+      categoryId,
+    });
+    console.log("Product added successfully.");
   } catch (error) {
-    console.error(`Error adding product to ${categoryName} in shop ${shopName}:`, error);
+    console.error("Error in addProduct function:", error);
     throw error;
   }
 }
+
 
 // ///////////////////////////////////////////////////////////////////////////////////////////
 
