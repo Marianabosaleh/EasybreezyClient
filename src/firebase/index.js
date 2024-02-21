@@ -140,7 +140,7 @@ export async function registerAgent(firstName, lastName, dateOfBirth, email, pas
     await addDoc(collection(db, 'carts'), { userId: user.uid, cartData: { items: [] } });
 
     const shopRef = await addDoc(collection(db, 'shops'), {
-      ownerId: user.uid,
+      shopId: user.uid,
       shopName,
       description,
       items: [],
@@ -189,39 +189,57 @@ export async function loginAgent(email, password) {
     throw error; // Rethrow error for handling in UI
   }
 }
-
-export async function addProduct(name, imageSrc, description, price, categoryName, shopId) {
-  if (!name || !imageSrc || !description || typeof price !== 'number' || isNaN(price) || price <= 0 || !categoryName || !shopId) {
-    throw new Error("Validation failed for input parameters.");
-  }
-
+export async function addProduct(name, imageSrc, description, price, categoryName) {
   try {
-    const db = getFirestore();
-    
-    // Here, ensure you are only using shopId to reference the shop
-    const categoriesRef = collection(db, `shops/${shopId}/categories`);
-    const categoryQuerySnapshot = await getDocs(query(categoriesRef, where("name", "==", categoryName)));
-    if (categoryQuerySnapshot.empty) {
-      throw new Error(`Category with name ${categoryName} not found in shop.`);
-    }
-    const categoryId = categoryQuerySnapshot.docs[0].id;
+    const auth = getAuth();
+    const user = auth.currentUser;
 
-    await addDoc(collection(db, `shops/${shopId}/items`), {
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
+    const db = getFirestore();
+
+    // Validate input parameters
+    if (!name || !imageSrc || !description || !price || isNaN(price) || price <= 0 || !categoryName) {
+      throw new Error("Validation failed for input parameters.");
+    }
+
+    // Fetch shopId based on user's ID
+    const shopsRef = collection(db, 'shops');
+    const q = query(shopsRef, where('shopId', '==', user.uid));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      throw new Error("Shop not found for the current user");
+    }
+
+    const shopDoc = querySnapshot.docs[0];
+    const shopId = shopDoc.id;
+
+    // Add the product to the shop's items collection
+    await addDoc(collection(db, `shops/${shopId}/categories`), {
       name,
       imageSrc,
       description,
       price,
-      categoryId,
+      categoryId: categoryName, // Assuming categoryName is the ID of the category
     });
+
     console.log("Product added successfully.");
   } catch (error) {
-    console.error("Error in addProduct function:", error);
+    console.error("Error adding product:", error.message);
     throw error;
   }
 }
 
 
 // ///////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 
 
 export async function addToCart(productData) {
