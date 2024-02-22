@@ -113,57 +113,64 @@ export async function loginCustomer(email, password) {
   }
 }
 
-// Function to register a new agent
 export async function registerAgent(firstName, lastName, dateOfBirth, email, password, shopName, description) {
   try {
+    // Basic data validation
     if (!firstName || !lastName || !dateOfBirth || !email || !password || !shopName || !description) {
       throw new Error("All fields are required for registration.");
     }
 
+    // Create user with email and password
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
+    // Update user profile with first and last name
     await updateProfile(user, {
       displayName: `${firstName} ${lastName}`,
     });
 
-    await addDoc(collection(db, 'agents'), {
-      firstName,
-      lastName,
-      dateOfBirth,
-      email,
+    // Add agent data to the "agents" collection in Firestore
+    const agentData = {
+      firstName: firstName,
+      lastName: lastName,
+      dateOfBirth: dateOfBirth,
+      email: email,
       userType: "Agent",
-      shopName,
-      description,
-    });
+      shopName: shopName,
+      description: description,
+    };
+    await addDoc(collection(db, 'agents'), agentData);
 
-    await addDoc(collection(db, 'carts'), { userId: user.uid, cartData: { items: [] } });
-
-    const shopRef = await addDoc(collection(db, 'shops'), {
-      shopId: user.uid,
-      shopName,
-      description,
+    // Automatically create a cart for the agent
+    const cartData = {
       items: [],
-    });
+    };
+    await addDoc(collection(db, 'carts'), { userId: user.uid, cartData });
 
-    // Initialize with default categories
-    const defaultCategories = ['Tops', 'Bottoms', 'Shoes', 'Accessories'];
-    const categoryPromises = defaultCategories.map(categoryName =>
-      addDoc(collection(db, `shops/${shopRef.id}/categories`), { name: categoryName })
-    );
-    await Promise.all(categoryPromises);
+    // Automatically create a favorites collection for the agent
+    const favoritesData = {
+      items: [],
+    };
+    await addDoc(collection(db, 'favorites'), { userId: user.uid, favoritesData });
 
-    console.log("Agent registered successfully with an initialized cart, shop, and default categories");
+    // Automatically create a shop collection for the agent
+    const shopData = {
+      shopName: shopName,
+      description: description,
+      agentId: user.uid,
+      products: [], // You can add more details about the shop here
+    };
+    await addDoc(collection(db, 'shops'), { userId: user.uid, shopData });
+
+    console.log("Agent registered successfully");
     return user;
   } catch (error) {
     console.error("Registration error: ", error.message);
-    throw error;
+    throw error; // Rethrow error for handling in UI
   }
 }
 
-
 // Login an agent
-
 export async function loginAgent(email, password) {
   try {
     // Check if the provided email exists in the agents collection
@@ -179,67 +186,137 @@ export async function loginAgent(email, password) {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // Retrieve the agent's shop name
-    const shopName = querySnapshot.docs[0].data().shopName;
+    // Assuming each agent document in Firestore contains a shopName field
+    let shopName = "";
+    querySnapshot.forEach((doc) => {
+      // Assuming 'shopName' is a field in your agents' documents
+      shopName = doc.data().shopName;
+    });
 
     console.log('Successfully signed in:', user);
+
+    // Return both user and shopName in an object
     return { user, shopName };
   } catch (error) {
     console.error("Login error: ", error.message);
     throw error; // Rethrow error for handling in UI
   }
 }
-export async function addProduct(name, imageSrc, description, price, categoryName) {
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+
+export async function addProductToCat(name, imageSrc, description, price, categoryName) {
   try {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if (!user) {
-      throw new Error("User not authenticated");
-    }
-
-    const db = getFirestore();
-
-    // Validate input parameters
-    if (!name || !imageSrc || !description || !price || isNaN(price) || price <= 0 || !categoryName) {
-      throw new Error("Validation failed for input parameters.");
-    }
-
-    // Fetch shopId based on user's ID
-    const shopsRef = collection(db, 'shops');
-    const q = query(shopsRef, where('shopId', '==', user.uid));
-    const querySnapshot = await getDocs(q);
-
-    if (querySnapshot.empty) {
-      throw new Error("Shop not found for the current user");
-    }
-
-    const shopDoc = querySnapshot.docs[0];
-    const shopId = shopDoc.id;
-
-    // Add the product to the shop's items collection
-    await addDoc(collection(db, `shops/${shopId}/categories`), {
-      name,
-      imageSrc,
-      description,
-      price,
-      categoryId: categoryName, // Assuming categoryName is the ID of the category
-    });
-
-    console.log("Product added successfully.");
+    const productData = {
+      name: name,
+      imageSrc: imageSrc,
+      description: description,
+      price: price,
+    };
+    await addDoc(collection(db, categoryName), productData); // Use the provided category name
+    console.log("Product added successfully");
   } catch (error) {
-    console.error("Error adding product:", error.message);
+    console.error(`Error adding ${categoryName} product: `, error.message);
+    throw error; // Rethrow error for handling in UI
+  }
+}
+
+
+export async function addProductToShop(productData) {
+  try {
+    const auth = getAuth(); // Get the authentication instance
+    const currentUser = auth.currentUser; // Get the currently authenticated user
+
+    if (!currentUser) {
+      throw new Error('User is not authenticated');
+    }
+
+    const userId = currentUser.uid; // Get the user ID
+
+    // Reference the user's shop document using the user's UID
+    const shopRef = doc(db, 'shops', userId);
+    
+    // Check if the shop document exists, if not, throw an error (shops should be created at registration)
+    let shopDoc = await getDoc(shopRef);
+    if (!shopDoc.exists()) {
+      throw new Error('Shop does not exist. Please ensure the shop is created during agent registration.');
+    }
+
+    // Check if shop data or products are undefined
+    if (!shopDoc.data() || !shopDoc.data().products) {
+      throw new Error('Shop data or products are undefined');
+    }
+
+    // Update the shop with the new product
+    const updatedShop = {
+      ...shopDoc.data(),
+      products: [...shopDoc.data().products, productData] // Add the new product data to the existing products array
+    };
+    await setDoc(shopRef, updatedShop);
+
+    console.log('Product added to shop successfully');
+  } catch (error) {
+    console.error('Error adding product to shop:', error.message);
+    throw error;
+  }
+}
+
+export async function removeProductFromShop(userId, index) {
+  try {
+    const shopRef = doc(db, 'shops', userId);
+    const shopDoc = await getDoc(shopRef);
+
+    if (!shopDoc.exists()) {
+      throw new Error('Shop does not exist');
+    }
+
+    // Filter out the product to be removed based on its index
+    const updatedProducts = shopDoc.data().products.filter((_, i) => i !== index);
+    await setDoc(shopRef, { products: updatedProducts });
+
+    console.log('Product removed from shop successfully');
+  } catch (error) {
+    console.error('Error removing product from shop:', error.message);
+    throw error;
+  }
+}
+
+
+export async function getShopProducts(userId) {
+  try {
+    // Reference the user's shop document using the user's UID
+    const shopRef = doc(db, 'shops', userId);
+    
+    // Fetch the shop document
+    let shopDoc = await getDoc(shopRef);
+
+    // Check if the shop document exists
+    if (!shopDoc.exists()) {
+      // Shop document doesn't exist, initialize it with empty products
+      const initialShopData = { products: [] };
+      await setDoc(shopRef, initialShopData);
+
+      // Fetch the newly created shop document
+      shopDoc = await getDoc(shopRef);
+    }
+
+    // Return the array of products in the shop
+    return shopDoc.data().products || [];
+  } catch (error) {
+    console.error('Error fetching shop products:', error.message);
     throw error;
   }
 }
 
 
 // ///////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
 
 
 export async function addToCart(productData) {
