@@ -74,7 +74,7 @@ const AgentProfilePage: React.FC = () => {
             <MdOutlineStorefront /> My Store
           </Link>
        
-          <Link to ='./Welcome'>
+          <Link to ='./LoginAgent'>
             <BsBoxArrowLeft style={{ marginRight: '8px' }} /> Sign Out
           </Link>
           <FaHome onClick={goToHomePage} style={{ cursor: 'pointer' }} />

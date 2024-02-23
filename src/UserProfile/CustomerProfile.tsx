@@ -91,7 +91,7 @@ const CustomerProfilePage: React.FC = () => {
           <Link to="/NeedHelpPage">
             <IoHelpCircleOutline style={{ marginRight: '8px' }} />Need Help
           </Link>
-          <Link to='./Welcome'>
+          <Link to='./LoginCustomer'>
             <BsBoxArrowLeft style={{ marginRight: '8px' }} /> Sign Out
           </Link>
           <FaHome onClick={goToHomePage} style={{ cursor: 'pointer' }} />

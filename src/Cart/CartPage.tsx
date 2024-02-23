@@ -39,18 +39,12 @@ const CartPage: React.FC = () => {
 
   // Recalculate total price when selected items change
   useEffect(() => {
-    calculateTotal();
-  }, [selectedItems]);
+    console.log("Cart Items:", cartItems);
+    console.log("Selected Items:", selectedItems);
+    calculateTotal(selectedItems, cartItems); // Pass the selectedItems and cartItems to calculateTotal
+  }, [selectedItems, cartItems]);
 
-  // Calculate the total price of selected items
-  const calculateTotal = () => {
-    const total = selectedItems.reduce(
-      (acc, index) => acc + cartItems[index].price,
-      0
-    );
-    setTotalPrice(total);
-  };
-
+  // Remove item from cart and update the cart items
   // Remove item from cart and update the cart items
   const handleRemoveFromCart = async (index: number) => {
     console.log('Removing item at index:', index);
@@ -68,6 +62,9 @@ const CartPage: React.FC = () => {
       console.error('Error removing item from cart:', (error as Error).message);
     }
   };
+
+
+  
 
   // Navigate to the home page
   const goToHomePage = () => {
@@ -97,6 +94,19 @@ const CartPage: React.FC = () => {
     setSelectedItems(selectAll ? [] : allItemIndexes);
     setSelectAll(!selectAll);
   };
+
+ // Calculate the total price
+const calculateTotal = (selectedItems: number[], cartItems: any[]) => {
+  const total = selectedItems.reduce((acc, index) => {
+    // Ensure that cartItems[index] exists before accessing its properties
+    if (cartItems[index]) {
+      return acc + parseFloat(cartItems[index].price);
+    }
+    return acc;
+  }, 0);
+  setTotalPrice(total);
+};
+
 
   // Render the cart page
   return (
@@ -134,7 +144,7 @@ const CartPage: React.FC = () => {
       <br></br>
       {/* Total price */}
       <div className="total-price" style={{ fontWeight: 'bold', fontSize: '15px' }}>
-        Total Price: ${totalPrice.toFixed(2)}
+        Total Price: {typeof totalPrice === 'number' ? `$${totalPrice.toFixed(2)}` : '$0.00'}
       </div>
       {/* Home button */}
       <FaHome style={{ cursor: 'pointer', marginTop: '25px', height: '30px', width: '55px' }} onClick={goToHomePage} />
@@ -142,9 +152,8 @@ const CartPage: React.FC = () => {
       <button className="checkout-button" onClick={handleCheckoutClick}> CHECKOUT ({getSelectedItemsCount()}) </button>
       {/* Conditionally render PaymentForm only when checkout is clicked */}
       {isCheckoutClicked && (
-      <PaymentForm cartItems={cartItems.filter((_, index) => selectedItems.includes(index))} totalPrice={totalPrice} />
+        <PaymentForm cartItems={cartItems.filter((_, index) => selectedItems.includes(index))} totalPrice={totalPrice} />
       )}
-      
     </div>
   );
 };
