@@ -4,6 +4,10 @@ import './styleS.css';
 import { getFirestore, collection, query, where, getDocs, DocumentData } from 'firebase/firestore'; // Adjust the import path as per your file structure
 import { FaSearch, FaHome, FaShoppingCart, FaHeart, FaUser } from 'react-icons/fa'; // Importing Font Awesome icons
 import { Link } from 'react-router-dom'; // If you're using React Router for navigation
+import CartHandler from '../Categories/carthandler';
+import FavoitesHandler from '../Categories/favoriteshandler';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+
 
 interface Product {
   id: string;
@@ -13,10 +17,17 @@ interface Product {
   imageSrc: string;
 }
 
+
 const SearchPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [matchingProducts, setMatchingProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  
+
+
+ 
+  
+  
 
   useEffect(() => {
     fetchProducts(); // Fetch all products initially
@@ -96,9 +107,16 @@ const SearchPage: React.FC = () => {
         <Link to="/HomePage" className="home-icon">
           <FaHome />
         </Link>
-        <FaShoppingCart className="cart-icon" />
-        <FaHeart className="heart-icon" />
-        <FaUser className="user-icon" />
+        <Link to="/CartPage">
+          <FaShoppingCart className="cart-icon" />
+        </Link>
+        <Link to="/FavoritesPage">
+          <FaHeart className="heart-icon" />
+        </Link>
+        
+          <FaUser className="user-icon" />
+        
+        
       </div>
       <form className="search-form" onSubmit={(e) => { e.preventDefault(); handleSearch(searchTerm); }}>
         <input
@@ -119,17 +137,12 @@ const SearchPage: React.FC = () => {
             <p>Description: {product.description}</p>
             <p>Price: ${product.price}</p>
             <img src={product.imageSrc} alt={product.name} style={{ width: '100px', height: '100px' }} />
+            <CartHandler product={selectedProduct} />
+            <FavoitesHandler product={selectedProduct} />
           </div>
         ))}
       </div>
-      {selectedProduct && (
-        <div className="selected-product">
-          <h2>{selectedProduct.name}</h2>
-          <p>Description: {selectedProduct.description}</p>
-          <p>Price: ${selectedProduct.price}</p>
-          <img src={selectedProduct.imageSrc} alt={selectedProduct.name} style={{ width: '200px', height: '200px' }} />
-        </div>
-      )}
+      
     </div>
   );
 };
