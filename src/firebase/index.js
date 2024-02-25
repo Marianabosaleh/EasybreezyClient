@@ -218,22 +218,30 @@ export async function loginAgent(email, password) {
 
 export async function addProductToCat(name, imageSrc, description, price, categoryName) {
   try {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+
+    if (!currentUser) {
+      throw new Error('User is not authenticated');
+    }
+
+    const userId = currentUser.uid;
+
     const productData = {
       name: name,
       imageSrc: imageSrc,
       description: description,
       price: price,
-  
+      userId: userId, // Add the userId to the product data
     };
 
-    await addDoc(collection(db, categoryName), productData); // Use the provided category name
+    await addDoc(collection(db, categoryName), productData);
     console.log("Product added successfully");
   } catch (error) {
     console.error(`Error adding ${categoryName} product: `, error.message);
     throw error; // Rethrow error for handling in UI
   }
 }
-
 
 export async function addProductToShop(productData) {
   try {

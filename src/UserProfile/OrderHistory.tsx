@@ -10,7 +10,7 @@ interface Order {
     description: string;
     imageSrc: string;
     name: string;
-    price: number;
+    price: number | string; // Accept both number and string to ensure flexibility
   }[];
   totalPrice: number;
   customer: {
@@ -31,34 +31,29 @@ const OrdersHistory: React.FC = () => {
 
   useEffect(() => {
     const fetchOrderHistory = async () => {
-      try {
-        if (currentUser) {
-          const userId = currentUser.uid;
-          const ordersCollectionRef = collection(getFirestore(), 'orders');
-          const userOrdersQuery = query(ordersCollectionRef, where('customer.email', '==', currentUser.email));
-          const querySnapshot = await getDocs(userOrdersQuery);
+      if (currentUser) {
+        const db = getFirestore();
+        const ordersCollectionRef = collection(db, 'orders');
+        const userOrdersQuery = query(ordersCollectionRef, where('customer.email', '==', currentUser.email));
+        const querySnapshot = await getDocs(userOrdersQuery);
 
-          const userOrders: Order[] = [];
-          querySnapshot.forEach((doc) => {
-            userOrders.push({ id: doc.id, ...doc.data() } as Order);
-        });
+        const userOrders: Order[] = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...(doc.data() as Omit<Order, 'id'>), // Cast the rest of the data to the Order type, excluding 'id'
+        }));
 
-          setOrders(userOrders);
-        } else {
-          console.log('User is not authenticated');
-        }
-      } catch (error) {
-        console.error('Error fetching order history:', error instanceof Error ? error.message : 'Unknown error');
+        setOrders(userOrders);
+      } else {
+        console.log('User is not authenticated');
       }
     };
 
     fetchOrderHistory();
   }, [currentUser]);
 
-  function goToHomePage() {
-    // Perform redirection here
-    window.location.href = '/HomePage'; 
-  }
+  const goToHomePage = () => {
+    window.location.href = '/HomePage'; // Consider using React Router's navigate for SPA-friendly navigation
+  };
 
   return (
     <div>
@@ -71,14 +66,14 @@ const OrdersHistory: React.FC = () => {
             <li key={order.id}>
               <div>
                 <h3>Order ID: {order.id}</h3>
-                <p>Total Price: ${order.totalPrice.toFixed(2)}</p>
+                <p>Total Price: ${typeof order.totalPrice === 'number' ? order.totalPrice.toFixed(2) : order.totalPrice}</p>
                 <p>Address: {order.address.street}, {order.address.city}, {order.address.zip}</p>
                 <ul>
                   {order.items.map((item, index) => (
                     <li key={index}>
                       <div>
                         <p>{item.name}</p>
-                        <p>Price: ${item.price.toFixed(2)}</p>
+                        <p>Price: ${typeof item.price === 'number' ? item.price.toFixed(2) : item.price}</p>
                       </div>
                     </li>
                   ))}
