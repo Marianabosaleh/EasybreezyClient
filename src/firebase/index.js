@@ -216,14 +216,14 @@ export async function loginAgent(email, password) {
 /////////////////////////////////////////////////////////////////////////////////////
 
 
-export async function addProductToCat(name, imageSrc, description, price, categoryName, userid) {
+export async function addProductToCat(name, imageSrc, description, price, categoryName) {
   try {
     const productData = {
       name: name,
       imageSrc: imageSrc,
       description: description,
       price: price,
-      userid : userid,
+  
     };
 
     await addDoc(collection(db, categoryName), productData); // Use the provided category name
