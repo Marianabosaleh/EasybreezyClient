@@ -4,7 +4,6 @@ import './styleS.css';
 import { getFirestore, collection, query, where, getDocs, DocumentData } from 'firebase/firestore'; // Adjust the import path as per your file structure
 import { FaSearch, FaHome, FaShoppingCart, FaHeart, FaUser } from 'react-icons/fa'; // Importing Font Awesome icons
 import { Link } from 'react-router-dom'; // If you're using React Router for navigation
-import IconNav from '../components/iconNav';
 
 interface Product {
   id: string;
@@ -14,10 +13,17 @@ interface Product {
   imageSrc: string;
 }
 
+
 const SearchPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [matchingProducts, setMatchingProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  
+
+
+ 
+  
+  
 
   useEffect(() => {
     fetchProducts(); // Fetch all products initially
@@ -90,6 +96,17 @@ const SearchPage: React.FC = () => {
 
   return (
     <div className="search-page-container">
+      <div className="icon-container">
+        <Link to="/SearchPage" className="search-icon">
+          <FaSearch />
+        </Link>
+        <Link to="/HomePage" className="home-icon">
+          <FaHome />
+        </Link>
+        <FaShoppingCart className="cart-icon" />
+        <FaHeart className="heart-icon" />
+        <FaUser className="user-icon" />
+      </div>
       <form className="search-form" onSubmit={(e) => { e.preventDefault(); handleSearch(searchTerm); }}>
         <input
           type="text"
@@ -109,6 +126,8 @@ const SearchPage: React.FC = () => {
             <p>Description: {product.description}</p>
             <p>Price: ${product.price}</p>
             <img src={product.imageSrc} alt={product.name} style={{ width: '100px', height: '100px' }} />
+            <CartHandler product={selectedProduct} />
+            <FavoitesHandler product={selectedProduct} />
           </div>
         ))}
       </div>
@@ -120,7 +139,6 @@ const SearchPage: React.FC = () => {
           <img src={selectedProduct.imageSrc} alt={selectedProduct.name} style={{ width: '200px', height: '200px' }} />
         </div>
       )}
-      <IconNav/>
     </div>
   );
 };

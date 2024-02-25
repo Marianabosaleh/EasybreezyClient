@@ -141,26 +141,29 @@ export async function registerAgent(firstName, lastName, dateOfBirth, email, pas
     };
     await addDoc(collection(db, 'agents'), agentData);
 
-    // Automatically create a cart for the agent
+    // Correctly create a cart document for the agent with the user's UID as the ID
+    const cartRef = doc(db, 'carts', user.uid); // Reference to the cart document with the user's UID
     const cartData = {
-      items: [],
+      items: [], // Initialize with an empty items array
     };
-    await addDoc(collection(db, 'carts'), { userId: user.uid, cartData });
+    await setDoc(cartRef, cartData); // Use setDoc to explicitly set the document
 
-    // Automatically create a favorites collection for the agent
+    // Correctly create a favorites document for the agent with the user's UID as the ID
+    const favoritesRef = doc(db, 'favorites', user.uid); // Reference to the favorites document with the user's UID
     const favoritesData = {
-      items: [],
+      items: [], // Initialize with an empty items array
     };
-    await addDoc(collection(db, 'favorites'), { userId: user.uid, favoritesData });
+    await setDoc(favoritesRef, favoritesData); // Use setDoc to explicitly set the document
 
-    // Automatically create a shop collection for the agent
+    // Correctly create a shop document with the user's UID as the ID
+    const shopRef = doc(db, 'shops', user.uid); // Create a reference to the shop document with the user's UID
     const shopData = {
       shopName: shopName,
       description: description,
       agentId: user.uid,
-      products: [], // You can add more details about the shop here
+      products: [], // Initialize with an empty products array
     };
-    await addDoc(collection(db, 'shops'), { userId: user.uid, shopData });
+    await setDoc(shopRef, shopData); // Use setDoc to explicitly set the document
 
     console.log("Agent registered successfully");
     return user;
@@ -169,6 +172,7 @@ export async function registerAgent(firstName, lastName, dateOfBirth, email, pas
     throw error; // Rethrow error for handling in UI
   }
 }
+
 
 // Login an agent
 export async function loginAgent(email, password) {
@@ -212,14 +216,16 @@ export async function loginAgent(email, password) {
 /////////////////////////////////////////////////////////////////////////////////////
 
 
-export async function addProductToCat(name, imageSrc, description, price, categoryName) {
+export async function addProductToCat(name, imageSrc, description, price, categoryName, userid) {
   try {
     const productData = {
       name: name,
       imageSrc: imageSrc,
       description: description,
       price: price,
+      userid : userid,
     };
+
     await addDoc(collection(db, categoryName), productData); // Use the provided category name
     console.log("Product added successfully");
   } catch (error) {
