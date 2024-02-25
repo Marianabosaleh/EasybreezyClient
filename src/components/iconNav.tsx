@@ -2,14 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getFirestore, collection, getDocs, where, query } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { Link } from 'react-router-dom';
-import './style.css';
-import shoes from './shoes.jpg';
-import T_SHIRT from './tops.jpg';
-import bottoms from './bottoms.jpg'
-import accessories from './accessories.jpg'
-
 import { FaHeart, FaUser, FaShoppingCart, FaHome, FaSearch } from 'react-icons/fa';
-import IconNav from '../components/iconNav';
 interface Agent {
   userTypeAgent: string;
 }
@@ -18,7 +11,7 @@ interface Customer {
   userTypeCustomer: string;
 }
 
-const HomePage: React.FC = () => {
+const IconNav: React.FC = () => {
   const [matchingAgents, setMatchingAgents] = useState<Agent[]>([]);
   const [matchingCustomers, setMatchingCustomers] = useState<Customer[]>([]);
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
@@ -91,36 +84,34 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="HomePage">
-      <h1>Welcome to Our Shopping Website!</h1>
-      {/* Categories */}
-      <div className="categories-row">
-        {/* Shoes category */}
-        <Link to="/ShoePage" className="category-container">
-          <img src={shoes} alt="shoes" className="category-image" />
-          <p className="category-name">Shoes</p>
+    <div className="iconNav">
+      {/* Icons */}
+      <div className="icon-container">
+        <Link to="/SearchPage">
+          <FaSearch className="search-icon" />
         </Link>
-        {/* Bottoms category */}
-        <Link to="/BottomsPage" className="category-container">
-          <img src={bottoms} alt="bottoms" className="category-image" />
-          <p className="category-name">Bottoms</p>
+        <Link to="/HomePage">
+          <FaHome  className="home-icon"/>
         </Link>
+        <Link to="/CartPage">
+          <FaShoppingCart className="cart-icon" />
+        </Link>
+        <Link to="/FavoritesPage">
+          <FaHeart className="heart-icon" />
+        </Link>
+        {matchingAgents.length > 0 ? (
+          <Link to="/profileAgent">
+            <FaUser className="user-icon" />
+          </Link>
+        ) : matchingCustomers.length > 0 ? (
+          <Link to="/profileCustomer">
+            <FaUser className="user-icon" />
+          </Link>
+        ) : (
+          <FaUser className="user-icon" />
+        )}
       </div>
-      <div className="categories-row">
-        {/* Accessories category */}
-        <Link to="/AccessoriesPage" className="category-container">
-          <img src={accessories} alt="Accessories" className="category-image" />
-          <p className="category-name">Accessories</p>
-        </Link>
-        {/* Tops category */}
-        <Link to="/TopsPage" className="category-container">
-          <img src={T_SHIRT} alt="tops" className="category-image" />
-          <p className="category-name">Tops</p>
-        </Link>
-      </div>
-
-      <IconNav/>
     </div>
   );
 };
-export default HomePage;
+export default IconNav;

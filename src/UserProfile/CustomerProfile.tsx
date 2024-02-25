@@ -8,6 +8,7 @@ import { getFirestore, collection, getDocs, where, query } from 'firebase/firest
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 
 import './profileC.css';
+import IconNav from "../components/iconNav";
 
 interface Customer {
   id: string;
@@ -95,6 +96,7 @@ const CustomerProfilePage: React.FC = () => {
             <BsBoxArrowLeft style={{ marginRight: '8px' }} /> Sign Out
           </Link>
           <FaHome onClick={goToHomePage} style={{ cursor: 'pointer' }} />
+          <IconNav/>
         </div>
       </div>
     </div>

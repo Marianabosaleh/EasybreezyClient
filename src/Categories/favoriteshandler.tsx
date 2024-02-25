@@ -1,27 +1,40 @@
-import React from 'react';
-import { addToFavorites } from '../firebase';
+import React, { useState } from 'react';
+import { addToFavorites, iconremoveFromFavorites } from '../firebase';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import './style.css';
 
 interface FavoritesHandlerProps {
-  product: any;
+  product: any; // Assuming product has an 'id' property
 }
 
-const FavoitesHandler: React.FC<FavoritesHandlerProps> = ({ product }) => {
-  const handleAddTofavorites = async () => {
+const FavoritesHandler: React.FC<FavoritesHandlerProps> = ({ product }) => {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const handleToggleFavorite = async () => {
     try {
-      await addToFavorites(product); // No need to pass userId
-      console.log('Product added to cart successfully');
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error adding product to cart:', error.message);
+      if (isFavorite) {
+        // Assuming removeFromFavorites now requires productId
+        await iconremoveFromFavorites(product.id);
+        console.log('Product removed from favorites successfully');
       } else {
-        console.error('Unknown error occurred while adding product to cart');
+        // Assuming addToFavorites now requires the whole product object or just productId
+        await addToFavorites(product);
+        console.log('Product added to favorites successfully');
       }
+      setIsFavorite(!isFavorite); // Toggle the favorite state
+    } catch (error) {
+      console.error('Error toggling product favorite status:', error instanceof Error ? error.message : 'Unknown error');
     }
   };
 
-  return (           
-    <button onClick={handleAddTofavorites}>Add to Favorites</button>
+  return (
+   
+    <button onClick={handleToggleFavorite} className="favorite-button">
+      {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+    </button>
+ 
   );
 };
 
-export default FavoitesHandler;
+export default FavoritesHandler;

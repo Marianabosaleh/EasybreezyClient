@@ -26,7 +26,7 @@ const ShopPage: React.FC = () => {
           const userId = currentUser.uid;
           const items = await getShopProducts(userId) as Product[]; // Cast the fetched items to Product[]
           // Initialize selectedCategory for each product if not already present
-          const itemsWithCategory = items.map(item => ({...item, selectedCategory: item.selectedCategory || 'tops'}));
+          const itemsWithCategory = items.map(item => ({...item, selectedCategory: item.selectedCategory || ''}));
           setProducts(itemsWithCategory);
         } else {
           console.log('User is not authenticated');

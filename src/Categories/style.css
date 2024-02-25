@@ -1,0 +1,53 @@
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 2fr)); /* Adjust the minmax values as per your design */
+    gap: 20px; /* Space between grid items */
+    padding: 20px;
+}
+
+.product-item {
+    border: 1px solid #ccc; /* Optional: adds a border around each product */
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.product-image {
+    transition: transform 0.2s ease; /* Smooth transition */
+}
+
+.product-item:hover .product-image {
+    transform: scale(1.1); /* Slightly increase size on hover */
+}
+
+@media (max-width: 600px) {
+    .product-container {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
+
+/* Adjusted button styles */
+.favorite-button,
+.favorite-button:focus,
+.favorite-button:hover,
+.favorite-button:active,
+.cart-button,
+.cart-button:focus,
+.cart-button:hover,
+.cart-button:active {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    padding: 0px;
+    cursor: pointer;
+    color: black;
+    display: flex; /* Ensure the button itself is flex to align the icon inside it, if needed */
+}
+
+/* New button container style */
+.product-item .button-container {
+    display: flex;
+    justify-content: space-between; /* This will position the favorite button to the left and the cart button to the right */
+    width: 100%; /* Ensure it spans the full width of the product-item */
+}

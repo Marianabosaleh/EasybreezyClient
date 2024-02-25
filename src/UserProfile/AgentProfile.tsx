@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaHome } from 'react-icons/fa';
 import { MdOutlineStorefront } from "react-icons/md";
 import './profileC.css';
+import IconNav from "../components/iconNav";
 
 const AgentProfilePage: React.FC = () => {
   const [user, setUser] = useState<any | null>(null);
@@ -78,6 +79,7 @@ const AgentProfilePage: React.FC = () => {
             <BsBoxArrowLeft style={{ marginRight: '8px' }} /> Sign Out
           </Link>
           <FaHome onClick={goToHomePage} style={{ cursor: 'pointer' }} />
+          <IconNav/>
         </div>
       </div>
     </div>

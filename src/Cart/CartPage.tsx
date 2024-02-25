@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getCartItems, removeFromCart } from '../firebase';
 import { getAuth } from 'firebase/auth';
-import { FaHome } from 'react-icons/fa';
 import './CartPage.css';
 import PaymentForm from '../UserProfile/Payment';
+import IconNav from '../components/iconNav';
 
 const CartPage: React.FC = () => {
   // State for cart items, user authentication, selected items, select all checkbox, total price, and checkout status
@@ -63,14 +63,7 @@ const CartPage: React.FC = () => {
     }
   };
 
-
   
-
-  // Navigate to the home page
-  const goToHomePage = () => {
-    window.location.href = '/HomePage';
-  };
-
   // Set checkout clicked state to true
   const handleCheckoutClick = () => {
     setIsCheckoutClicked(true);
@@ -146,15 +139,15 @@ const calculateTotal = (selectedItems: number[], cartItems: any[]) => {
       <div className="total-price" style={{ fontWeight: 'bold', fontSize: '15px' }}>
         Total Price: {typeof totalPrice === 'number' ? `$${totalPrice.toFixed(2)}` : '$0.00'}
       </div>
-      {/* Home button */}
-      <FaHome style={{ cursor: 'pointer', marginTop: '25px', height: '30px', width: '55px' }} onClick={goToHomePage} />
       {/* Checkout button */}
       <button className="checkout-button" onClick={handleCheckoutClick}> CHECKOUT ({getSelectedItemsCount()}) </button>
       {/* Conditionally render PaymentForm only when checkout is clicked */}
       {isCheckoutClicked && (
         <PaymentForm cartItems={cartItems.filter((_, index) => selectedItems.includes(index))} totalPrice={totalPrice} />
       )}
+      <IconNav/>
     </div>
+    
   );
 };
 

@@ -36,11 +36,3 @@
     max-height: 100px; /* Adjust the maximum height as needed */
   }
   
-  .favorite-button {
-    background-color: #ccc; /* Light gray background */
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
