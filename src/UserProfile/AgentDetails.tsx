@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { getFirestore, collection, getDocs, where, query } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { format } from 'date-fns';
-import { FaHome } from 'react-icons/fa';
+import { FaHome, FaUser } from 'react-icons/fa';
+import './profileC.css'; // Make sure to import your CSS file
 
 interface Agent {
   id: string;
@@ -17,7 +18,6 @@ interface Agent {
 
 const AgentDetailsPage: React.FC = () => {
   const [matchingAgents, setMatchingAgents] = useState<Agent[]>([]);
-  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -33,29 +33,12 @@ const AgentDetailsPage: React.FC = () => {
 
   const fetchAgents = async () => {
     try {
-      const auth = getAuth();
       if (currentUser) {
         const firestore = getFirestore();
         const agentsCollection = collection(firestore, 'agents');
         const q = query(agentsCollection, where('email', '==', currentUser.email));
         const querySnapshot = await getDocs(q);
-
-        const agents: Agent[] = [];
-
-        querySnapshot.forEach((doc) => {
-          const agentData = doc.data() as Agent;
-          agents.push({
-            id: doc.id,
-            dateOfBirth: agentData.dateOfBirth,
-            description: agentData.description,
-            shopName: agentData.shopName,
-            firstName: agentData.firstName,
-            lastName: agentData.lastName,
-            email: agentData.email,
-            userType: agentData.userType
-          });
-        });
-
+        const agents = querySnapshot.docs.map(doc => ({...doc.data(), id: doc.id})) as Agent[];
         setMatchingAgents(agents);
       }
     } catch (error) {
@@ -67,50 +50,31 @@ const AgentDetailsPage: React.FC = () => {
     fetchAgents();
   }, [currentUser]);
 
-  const handleAgentSelect = (agent: Agent) => {
-    setSelectedAgent(agent);
-  };
-
   const formatDate = (dateString: string) => {
     try {
-      const formattedDate = format(new Date(dateString), 'MMMM dd, yyyy');
-      return formattedDate;
+      return format(new Date(dateString), 'MMMM dd, yyyy');
     } catch (error) {
       console.error('Error formatting date:', error);
       return 'Invalid Date';
     }
   };
-  const goToHomePage = () => {
-    window.location.href = '/HomePage';
-  };
-
+  
 
   return (
-      <div className="matching-agents">
+    <div className="main-container">
+      <div className="agent-details-container">
         {matchingAgents.map((agent) => (
-          <div key={agent.id} className="agent" onClick={() => handleAgentSelect(agent)}>
-            <p>Shop Name: {agent.shopName}</p>
-            <p>Description: {agent.description}</p>
-            <p>Date of Birth: {formatDate(agent.dateOfBirth)}</p>
-            <p>First Name: {agent.firstName}</p>
-            <p>Last Name: {agent.lastName}</p>
-            <p>Email: {agent.email}</p>
-            <p>userType: {agent.userType}</p>
+          <div key={agent.id} className="agent-details">
+            <h2>{agent.shopName}</h2>
+            <p><strong>First Name:</strong> {agent.firstName}</p>
+            <p><strong>Last Name:</strong> {agent.lastName}</p>
+            <p><strong>Email:</strong> {agent.email}</p>
+            <p><strong>Description:</strong> {agent.description}</p>
+            <p><strong>Date of Birth:</strong> {formatDate(agent.dateOfBirth)}</p>
+            <p><strong>User Type:</strong> {agent.userType}</p>
           </div>
         ))}
-      {selectedAgent && (
-        <div className="selected-agent">
-          <p>First Name: {selectedAgent.firstName}
-          </p>
-          <p>Last Name: {selectedAgent.lastName}</p>
-          <p>Email: {selectedAgent.email}</p>
-          <h2>{selectedAgent.shopName}</h2>
-          <p>Description: {selectedAgent.description}</p>
-          <p>Date of Birth: {formatDate(selectedAgent.dateOfBirth)}</p>
-          <p>User Type : {selectedAgent.userType}</p>
-        </div>
-      )}
-       <FaHome onClick={goToHomePage} style={{ cursor: 'pointer' }} />
+      </div>
     </div>
   );
 };

@@ -6,7 +6,7 @@
 }
 
 .product-item {
-    border: 1px solid #ccc; /* Optional: adds a border around each product */
+    /* border: 1px solid #ccc;  */
     padding: 10px;
     display: flex;
     flex-direction: column;

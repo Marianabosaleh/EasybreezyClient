@@ -3,6 +3,7 @@ import { getFirestore, collection, getDocs, where, query } from 'firebase/firest
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { format } from 'date-fns';
 import { FaHome } from 'react-icons/fa';
+import './profileC.css'; // Assuming the same CSS file is applicable
 
 interface Customer {
   id: string;
@@ -14,90 +15,47 @@ interface Customer {
 
 const CustomerDetailsPage: React.FC = () => {
   const [matchingCustomers, setMatchingCustomers] = useState<Customer[]>([]);
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
     const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
     });
-
-    return () => {
-      unsubscribe();
-    };
   }, []);
 
-  const fetchCustomers = async () => {
-    try {
-      const auth = getAuth();
+  useEffect(() => {
+    const fetchCustomers = async () => {
       if (currentUser) {
         const firestore = getFirestore();
-        const customersCollection = collection(firestore, 'customers'); // Update collection name
+        const customersCollection = collection(firestore, 'customers');
         const q = query(customersCollection, where('email', '==', currentUser.email));
         const querySnapshot = await getDocs(q);
-
-        const customers: Customer[] = [];
-
-        querySnapshot.forEach((doc) => {
-          const customerData = doc.data() as Customer;
-          customers.push({
-            id: doc.id,
-            dateOfBirth: customerData.dateOfBirth,
-            firstName: customerData.firstName,
-            lastName: customerData.lastName,
-            email: customerData.email,
-          });
-        });
-
+        const customers = querySnapshot.docs.map(doc => ({
+          ...doc.data(),
+          id: doc.id,
+        })) as Customer[];
         setMatchingCustomers(customers);
       }
-    } catch (error) {
-      console.error('Error fetching customers:', error);
-    }
-  };
+    };
 
-  useEffect(() => {
     fetchCustomers();
   }, [currentUser]);
 
-  const handleCustomerSelect = (customer: Customer) => {
-    setSelectedCustomer(customer);
-  };
+  const formatDate = (dateString: string) => format(new Date(dateString), 'MMMM dd, yyyy');
 
-  const formatDate = (dateString: string) => {
-    try {
-      const formattedDate = format(new Date(dateString), 'MMMM dd, yyyy');
-      return formattedDate;
-    } catch (error) {
-      console.error('Error formatting date:', error);
-      return 'Invalid Date';
-    }
-  };
-  function goToHomePage() {
-    // Perform redirection here
-    window.location.href = '/HomePage'; 
-  }
   return (
-    <div className="matching-customers">
-      {matchingCustomers.map((customer) => (
-        <div key={customer.id} className="customer" onClick={() => handleCustomerSelect(customer)}>
-          <p>First Name: {customer.firstName}</p>
-          <p>Last Name: {customer.lastName}</p>
-          <p>Date of Birth: {formatDate(customer.dateOfBirth)}</p>
-          <p>Email: {customer.email}</p>
-        </div>
-      ))}
-      {selectedCustomer && (
-        <div className="selected-customer">
-          <p>First Name: {selectedCustomer.firstName}</p>
-          <p>Last Name: {selectedCustomer.lastName}</p>
-          <p>Email: {selectedCustomer.email}</p>
-          <p>Date of Birth: {formatDate(selectedCustomer.dateOfBirth)}</p>
-        </div>
-      )}
-      <FaHome onClick={goToHomePage} style={{ cursor: 'pointer' }} />
+    <div className="main-container">
+      <div className="agent-details-container"> {/* Use the same container class for consistency */}
+        {matchingCustomers.map((customer) => (
+          <div key={customer.id} className="agent-details"> {/* Use the same details class for styling */}
+            <h2>{customer.firstName} {customer.lastName}</h2> {/* Combine names for a concise header */}
+            <p><strong>Email:</strong> {customer.email}</p>
+            <p><strong>Date of Birth:</strong> {formatDate(customer.dateOfBirth)}</p>
+          </div>
+        ))}
       </div>
+    </div>
   );
 };
 
