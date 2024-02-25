@@ -4,6 +4,8 @@ import './styleS.css';
 import { getFirestore, collection, query, where, getDocs, DocumentData } from 'firebase/firestore'; // Adjust the import path as per your file structure
 import { FaSearch, FaHome, FaShoppingCart, FaHeart, FaUser } from 'react-icons/fa'; // Importing Font Awesome icons
 import { Link } from 'react-router-dom'; // If you're using React Router for navigation
+import CartHandler from '../Categories/carthandler';
+import FavoritesHandler from '../Categories/favoriteshandler';
 
 interface Product {
   id: string;
@@ -127,7 +129,7 @@ const SearchPage: React.FC = () => {
             <p>Price: ${product.price}</p>
             <img src={product.imageSrc} alt={product.name} style={{ width: '100px', height: '100px' }} />
             <CartHandler product={selectedProduct} />
-            <FavoitesHandler product={selectedProduct} />
+            <FavoritesHandler product={selectedProduct} />
           </div>
         ))}
       </div>

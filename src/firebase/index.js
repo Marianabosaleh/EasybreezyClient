@@ -321,6 +321,39 @@ export async function getShopProducts(userId) {
   }
 }
 
+export async function iconremoveFromFavorites(productId) {
+  try {
+    const auth = getAuth(); // Get the authentication instance
+    const currentUser = auth.currentUser; // Get the currently authenticated user
+
+    if (!currentUser) {
+      throw new Error('User is not authenticated');
+    }
+
+    const userId = currentUser.uid; // Get the user ID
+
+    // Reference the user's favorites document using the user's UID
+    const favoritesRef = doc(db, 'favorites', userId);
+    const favoritesDoc = await getDoc(favoritesRef);
+
+    if (!favoritesDoc.exists()) {
+      throw new Error('Favorites document does not exist');
+    }
+
+    // Assuming productData contains an 'id' property
+    const existingItems = favoritesDoc.data().items;
+    const filteredItems = existingItems.filter(item => item.id !== productId);
+
+    // Update the favorites document without the removed item
+    await setDoc(favoritesRef, { items: filteredItems });
+
+    console.log('Item removed from favorites successfully');
+  } catch (error) {
+    console.error('Error removing item from favorites:', error.message);
+    throw error;
+  }
+}
+
 
 // ///////////////////////////////////////////////////////////////////////////////////////////
 
