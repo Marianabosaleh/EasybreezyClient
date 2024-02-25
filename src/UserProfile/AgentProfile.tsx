@@ -59,9 +59,9 @@ const AgentProfilePage: React.FC = () => {
       <h3>Hello, {getFirstName()}</h3>
       <div className="main-container">
         <div className="left-nav">
-          <a href="#">
+        <Link to="/AgentOrders">
             <IoList style={{ marginRight: '8px' }} /> My Orders
-          </a>
+          </Link>
           <Link to="/agentdetails">
             <ImProfile style={{ marginRight: '8px' }} /> My Details
           </Link>

@@ -6,7 +6,7 @@ import { MdOutlineAddHome, MdPayment } from 'react-icons/md';
 import { FaHome } from 'react-icons/fa';
 
 interface PaymentFormProps {
-  cartItems: any[]; // Change 'any[]' to the actual type of your cart items
+  cartItems: CartItem[]; 
   totalPrice: number;
 }
 
@@ -22,13 +22,17 @@ interface AddressDetails {
   zipCode: string;
 }
 
+interface CartItem {
+  userId: any;
+  agentUserId: string;
+  description: string;
+  imageSrc: string;
+  name: string;
+  price: number;
+}
+
 interface OrderDetails {
-  items: {
-    description: string;
-    imageSrc: string;
-    name: string;
-    price: number;
-  }[];
+  items: CartItem[];
   totalPrice: number;
   customer: {
     email: string;
@@ -39,18 +43,19 @@ interface OrderDetails {
     street: string;
     zip: string;
   };
+  userId: string;
 }
 
+
+
 const PaymentForm: React.FC<PaymentFormProps> = ({ cartItems, totalPrice }) => {
-  // State variables for form fields
-  const [visaNumber, setVisaNumber] = useState('');
-  const [cvv, setCvv] = useState('');
-  const [expirationDate, setExpirationDate] = useState('');
-  const [street, setStreet] = useState('');
-  const [city, setCity] = useState('');
-  const [zipCode, setZipCode] = useState('');
-  // State to store whether the order has been successfully placed
-  const [orderPlaced, setOrderPlaced] = useState(false);
+  const [visaNumber, setVisaNumber] = useState<string>('');
+  const [cvv, setCvv] = useState<string>('');
+  const [expirationDate, setExpirationDate] = useState<string>('');
+  const [street, setStreet] = useState<string>('');
+  const [city, setCity] = useState<string>('');
+  const [zipCode, setZipCode] = useState<string>('');
+  const [orderPlaced, setOrderPlaced] = useState<boolean>(false);
 
   // Get the authentication instance and the currently authenticated user
   const auth = getAuth();
@@ -66,7 +71,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ cartItems, totalPrice }) => {
   });
 
   // Form submission handler
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Validation checks for CVV, expiration date, and required fields
@@ -85,54 +90,41 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ cartItems, totalPrice }) => {
       return;
     }
 
+    const groupedItems = cartItems.reduce((acc: Record<string, CartItem[]>, item: CartItem) => {
+      const userId = item.userId;
+      acc[userId] = acc[userId] || [];
+      acc[userId].push(item);
+      return acc;
+    }, {});
+
     try {
-      // Firestore collection reference for orders
-      const ordersCollectionRef = collection(getFirestore(), 'orders');
+      for (const [userId, items] of Object.entries(groupedItems)) {
+        const orderDetails: OrderDetails = {
+          items: cartItems.map(item => ({
+            ...item,
+            userId: item.userId, // Ensure this is included and correct
+          })),
+          totalPrice,
+          customer: {
+            email: currentUser?.email || '',
+            visaNumber, // Be mindful of storing sensitive info like this
+          },
+          address: {
+            city,
+            street,
+            zip: zipCode,
+          },
+          userId
+        };
+        
+        await addDoc(collection(getFirestore(), 'orders'), orderDetails);
+      }
 
-      // Create an OrderDetails object with data from the form
-      const orderDetails: OrderDetails = {
-        items: cartItems.map(item => ({
-          description: item.name,
-          imageSrc: item.imageSrc,
-          name: item.name,
-          price: item.price,
-        })),
-        totalPrice: totalPrice,
-        customer: {
-          email: currentUser && currentUser.email ? currentUser.email : 'unknown@example.com',
-          visaNumber: visaNumber,
-        },
-        address: {
-          city: city,
-          street: street,
-          zip: zipCode,
-        },
-      };
-
-      // Add the order to the Firestore collection
-      const orderDocRef = await addDoc(ordersCollectionRef, orderDetails);
-
-    // Set orderPlaced to true after successful order placement
-    setOrderPlaced(true);
-      console.log('Order placed successfully!', orderDocRef.id);
-
-      // Clear form fields after submission
-      setSubmittedData({
-        payment: {
-          visaNumber: '',
-          cvv: '',
-          expirationDate: '',
-        },
-        address: {
-          street: '',
-          city: '',
-          zipCode: '',
-        },
-      });
-
-      console.log('Payment and address data updated in Firestore!');
+      setOrderPlaced(true);
+      // Optionally clear form fields here
+      console.log('Orders placed successfully!');
     } catch (error) {
-      console.error('Error placing order:', error);
+      console.error('Error placing orders:', error);
     }
   };
 
@@ -160,9 +152,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ cartItems, totalPrice }) => {
   }, []);
 
   // Navigate to the home page
-  const goToHomePage = () => {
-    window.location.href = '/HomePage';
-  };
+
 
 
   return (
@@ -229,10 +219,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ cartItems, totalPrice }) => {
        {orderPlaced && <p>Order placed successfully!</p>}
 
       <br />
-      <FaHome
-        onClick={goToHomePage}
-        style={{ cursor: 'pointer', marginTop: '20px', height: '25px', width: '35px' }}
-      />
+     
     </div>
   );
 };

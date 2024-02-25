@@ -219,22 +219,25 @@ export async function loginAgent(email, password) {
 export async function addProductToCat(name, imageSrc, description, price, categoryName) {
   try {
     const auth = getAuth();
-    const currentUser = auth.currentUser;
+const currentUser = auth.currentUser;
 
-    if (!currentUser) {
-      throw new Error('User is not authenticated');
-    }
+if (!currentUser) {
+  console.error('User is not authenticated');
+  throw new Error('User is not authenticated');
+}
 
-    const userId = currentUser.uid;
+const userId = currentUser.uid;// This is the authenticated user's ID
 
+    // Creating the structured product object with userId
     const productData = {
       name: name,
       imageSrc: imageSrc,
       description: description,
       price: price,
-      userId: userId, // Add the userId to the product data
+      userId: userId,
     };
 
+    // Adding the product to the specified category in the database
     await addDoc(collection(db, categoryName), productData);
     console.log("Product added successfully");
   } catch (error) {
@@ -242,6 +245,7 @@ export async function addProductToCat(name, imageSrc, description, price, catego
     throw error; // Rethrow error for handling in UI
   }
 }
+
 
 export async function addProductToShop(productData) {
   try {
@@ -556,21 +560,40 @@ export async function getFavoriteItems(userId) {
     throw error;
   }
 }
+
 // Function to add an order to Firestore
-export const addOrder = async (userId, selectedProducts) => {
+export const addOrder = async (orderDetails) => {
   const db = getFirestore();
 
   try {
-    // Create a new order document with user ID, timestamp, and selected products
-    const orderDocRef = await addDoc(collection(db, 'users', userId, 'orders'), {
-      userId: userId,
-      timestamp: serverTimestamp(),
-      products: selectedProducts,
+    // Assuming `orderDetails` includes customer's userId, agent's userId, selected products, and other relevant info
+    const orderDocRef = await addDoc(collection(db, 'orders'), {
+      ...orderDetails,
+      timestamp: serverTimestamp(), // Ensure the order has a timestamp
     });
 
     console.log('Order added with ID: ', orderDocRef.id);
   } catch (error) {
     console.error('Error adding order: ', error);
     throw new Error('Failed to add order to Firestore');
+  }
+};
+
+// Function for agents to retrieve their orders
+export const getOrdersForAgent = async (agentUserId) => {
+  const db = getFirestore();
+  const ordersRef = collection(db, 'orders');
+  const q = query(ordersRef, where("agentUserId", "==", agentUserId)); // Ensure you're matching against the agent's userId
+
+  try {
+    const querySnapshot = await getDocs(q);
+    const orders = [];
+    querySnapshot.forEach((doc) => {
+      orders.push({ id: doc.id, ...doc.data() });
+    });
+    return orders;
+  } catch (error) {
+    console.error('Error fetching orders for agent:', error);
+    throw new Error('Failed to fetch orders');
   }
 };

@@ -24,6 +24,7 @@ import SearchPage from "./Searchpage/SearchPage";
 //import AddProductForm from "./Shop/addproduct";
 import OrdersHistory from "./UserProfile/OrderHistory";
 import ShopPage from "./Shop/shopPage";
+import AgentOrders from "./UserProfile/agentOrderHistory";
 
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
         <Route path="/SearchPage" element={<SearchPage/>}/>
         <Route path="/ordershistory" element={<OrdersHistory/>}/>
         <Route path="/ShopPage" element={<ShopPage/>}/>
+        <Route path="/AgentOrders" element={<AgentOrders/>}/>
       </Routes>
     </Router>
   );
