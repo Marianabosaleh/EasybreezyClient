@@ -1,6 +1,5 @@
-// ProductForm.tsx
-
 import React, { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 interface ProductFormProps {
   onSubmit: (productData: any) => void;
@@ -8,7 +7,7 @@ interface ProductFormProps {
 
 const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
   const [productData, setProductData] = useState({
-    id:'',
+    id: '',
     name: '',
     price: '',
     description: '',
@@ -22,7 +21,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(productData);
+
+    // Generate a random UUID for the id field
+    const randomId = uuidv4();
+    onSubmit({ ...productData, id: randomId });
+
+    // Reset form fields
     setProductData({
       id: '',
       name: '',
@@ -32,10 +36,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
       selectedCategory: 'tops',
     });
   };
-
   return (
     <form onSubmit={handleSubmit}>
-      <input type="text" name="id" placeholder="Product Id" value={productData.id} onChange={handleChange} />
+      <input type="text" name="id" placeholder="Product Id" value={productData.id} onChange={handleChange} disabled />
       <input type="text" name="name" placeholder="Product Name" value={productData.name} onChange={handleChange} />
       <input type="text" name="price" placeholder="Price" value={productData.price} onChange={handleChange} />
       <input type="text" name="description" placeholder="Description" value={productData.description} onChange={handleChange} />
