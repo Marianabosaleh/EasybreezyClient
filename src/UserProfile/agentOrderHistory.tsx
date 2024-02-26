@@ -7,26 +7,30 @@ import { getAuth } from 'firebase/auth';
 
 
 
+interface CartItem {
+  userId: any;
+  agentUserId: string;
+  description: string;
+  imageSrc: string;
+  name: string;
+  price: number;
+}
+
 interface AgentOrder {
   id: string;
-  items: CartItem[]; // Use the CartItem interface from your place order code
+  items: CartItem[];
   totalPrice: number;
   customer: {
     email: string;
+    visaNumber: string;
   };
   address: {
     city: string;
     street: string;
     zip: string;
   };
+  userId: string;
 }
-export interface CartItem {
-    agentUserId: string;
-    description: string;
-    imageSrc: string;
-    name: string;
-    price: number;
-  }
 
 const AgentOrders: React.FC = () => {
   const [orders, setOrders] = useState<AgentOrder[]>([]);
@@ -38,36 +42,46 @@ const AgentOrders: React.FC = () => {
       if (currentUser) {
         const db = getFirestore();
         const ordersCollectionRef = collection(db, 'orders');
-        // Assuming 'agentUserId' field exists in your orders collection
+        // This query fetches orders where the order's userId matches the current user's ID
         const agentOrdersQuery = query(ordersCollectionRef, where('userId', '==', currentUser.uid));
         const querySnapshot = await getDocs(agentOrdersQuery);
-
-        const agentOrders: AgentOrder[] = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...(doc.data() as Omit<AgentOrder, 'id'>),
-        }));
-       
+    
+        const agentOrders: AgentOrder[] = querySnapshot.docs.map(doc => {
+          const orderData = doc.data() as Omit<AgentOrder, 'id'>;
+          // Corrected: Filter items to include only those where item.userId matches the order's userId
+          const filteredItems = orderData.items.filter(item => item.userId === orderData.userId);
+          return {
+            ...orderData, // Spread the order data here
+            id: doc.id, // Include the document id as part of the order object
+            items: filteredItems, // Use the filtered items
+          };
+        });
+    
 
         setOrders(agentOrders);
       } else {
         console.log('User is not authenticated');
       }
-      
-      
     };
+    
+    
 
     fetchAgentOrders();
   }, [currentUser]);
 
   return (
-    <div>
+    <div className="main-container">
+    <div className="left-nav">
+      {/* Left navigation or any other content */}
+    </div>
+    <div className="agent-details">
       <h1>Agent Orders</h1>
       {orders.length === 0 ? (
         <p>No orders found.</p>
       ) : (
         <ul>
           {orders.map((order) => (
-            <li key={order.id}>
+            <li key={order.id} className="agent-preview">
               <div>
                 <h3>Order ID: {order.id}</h3>
                 <p>Email: {order.customer.email}</p>
@@ -90,6 +104,8 @@ const AgentOrders: React.FC = () => {
         </ul>
       )}
     </div>
+  </div>
+  
   ); 
 };
   

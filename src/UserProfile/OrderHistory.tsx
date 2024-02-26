@@ -3,6 +3,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { FaHome } from 'react-icons/fa';
+import './profileC.css';
 
 interface Order {
   id: string;
@@ -56,6 +57,7 @@ const OrdersHistory: React.FC = () => {
   };
 
   return (
+
     <div>
       <h1>Orders History</h1>
       {orders.length === 0 ? (
@@ -69,12 +71,12 @@ const OrdersHistory: React.FC = () => {
                 <p>Total Price: ${typeof order.totalPrice === 'number' ? order.totalPrice.toFixed(2) : order.totalPrice}</p>
                 <p>Address: {order.address.street}, {order.address.city}, {order.address.zip}</p>
                 <ul>
-                  {order.items.map((item, index) => (
+                {order.items.map((item, index) => (
                     <li key={index}>
-                      <div>
-                        <p>{item.name}</p>
-                        <p>Price: ${typeof item.price === 'number' ? item.price.toFixed(2) : item.price}</p>
-                      </div>
+                      <p>Name: {item.name}</p>
+                      <p>Description: {item.description}</p>
+                      <p>Price: ${item.price}</p>
+                      <img src={item.imageSrc} alt={item.name} style={{ width: '100px', height: '100px' }} />
                     </li>
                   ))}
                 </ul>
@@ -86,6 +88,7 @@ const OrdersHistory: React.FC = () => {
       )}
       <FaHome style={{ cursor: 'pointer', marginTop: '25px', height: '30px', width: '55px' }} onClick={goToHomePage} />
     </div>
+   
   );
 };
 
