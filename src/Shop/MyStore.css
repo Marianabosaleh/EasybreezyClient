@@ -1,0 +1,44 @@
+.my-store-container {
+    text-align: center;
+    background-color: #FCEEE4; 
+    padding: 150px;
+    border-radius: 80px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.icon-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.icon {
+    font-size: 1.5em; /* Adjusted the default icon size */
+    margin-right: 8px;
+}  
+
+.add-products-link,
+.my-products-link {
+    text-decoration: none;
+    color: #000000; /* Change the color based on your design */
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #000000; /* Change the border color based on your design */
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    width: 200px; /* Set a fixed width for both buttons */
+}
+
+.add-products-link:hover,
+.my-products-link:hover {
+    background-color: #bd24a3; /* Change the background color on hover based on your design */
+    color: #fff; /* Change the text color on hover based on your design */
+}
+
+/* Adjusted font size for Add Products link */
+.add-products-link {
+    font-size: 20px;
+}
+.my-products-link {
+    font-size: 20px;
+}
