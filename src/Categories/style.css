@@ -1,31 +1,60 @@
 .product-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 2fr)); /* Adjust the minmax values as per your design */
-    gap: 20px; /* Space between grid items */
+    grid-template-columns: 1fr; /* Single column layout */
+    gap: 90px; /* Adjust gap for visual separation */
     padding: 20px;
-}
-
-.product-item {
-    /* border: 1px solid #ccc;  */
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.product-image {
-    transition: transform 0.2s ease; /* Smooth transition */
-}
-
-.product-item:hover .product-image {
-    transform: scale(1.1); /* Slightly increase size on hover */
-}
-
-@media (max-width: 600px) {
+  }
+  
+  @media (min-width: 768px) {
     .product-container {
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      grid-template-columns: repeat(2, 1fr); /* Two columns on wider screens */
     }
-}
+  }
+  
+  .product-item {
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease-in-out;
+    flex-direction: column;
+    background-color:#FCEEE4; 
+    width: 200px;
+    margin: auto;
+    height: auto;
+  }
+  
+  .product-item:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  
+  .product-container.product-item img {
+    width: 100%; /* Ensure image does not overflow its container */
+    height: 150%;
+    object-fit: cover;
+    display: block;
+    margin: auto;
+  }
+  
+  .product-item p {
+    
+    color: #333;
+    margin: 19px ;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Adjusted button styles */
 .favorite-button,

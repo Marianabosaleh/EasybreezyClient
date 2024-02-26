@@ -51,10 +51,11 @@ const CategoryPage: React.FC<Props> = ({ categoryName }: Props) => {
       <h1>{`${categoryName.charAt(0).toUpperCase() + categoryName.slice(1)} Products`}</h1>
       <div className="product-container">
         {products.map(product => (
-          <div key={product.id} className="product-item">
+          <div key={product.id} className="product-item"> {/* Added className for styling */}
+            
+            <img src={product.imageSrc} alt={product.name} style={{ width: '200px', height: 'auto' }} />
             <h2>{product.name}</h2>
-            <img src={product.imageSrc} alt={product.name} className="product-image" style={{ maxWidth: '200px', maxHeight: '150px' }} />
-            <p className="product-description">{product.description}</p>
+            <p>{product.description}</p>
             <p>Price: ${product.price}</p>
             <div className="button-container">
               <CartHandler product={product} />
@@ -66,5 +67,6 @@ const CategoryPage: React.FC<Props> = ({ categoryName }: Props) => {
     </div>
   );
 };
+
 
 export default CategoryPage;
