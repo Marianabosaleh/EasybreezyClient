@@ -3,7 +3,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { FaHome } from 'react-icons/fa';
 import { getShopProducts, removeProductFromShop, removeProductFromCat } from '../firebase';
 import { IoTrash } from "react-icons/io5";
-import { v4 as uuidv4 } from 'uuid';
+
 
 interface Product {
   id: number;
