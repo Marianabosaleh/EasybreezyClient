@@ -84,19 +84,19 @@ const CustomerProfilePage: React.FC = () => {
       <div className="main-container">
         <div className="left-nav">
           <Link to="/ordershistory">
-            <IoList style={{ marginRight: '8px' }} /> My Orders
+            <IoList className="icon" style={{ marginRight: '8px' }} /> My Orders
           </Link>
           <Link to="/customerdetails">
-            <ImProfile style={{ marginRight: '8px' }} /> My Details
+            <ImProfile className="icon" style={{ marginRight: '8px' }} /> My Details
           </Link>
           <Link to="/NeedHelpPage">
-            <IoHelpCircleOutline style={{ marginRight: '8px' }} />Need Help
+            <IoHelpCircleOutline className="icon" style={{ marginRight: '8px' }} />Need Help
           </Link>
           <Link to='./LoginCustomer'>
-            <BsBoxArrowLeft style={{ marginRight: '8px' }} /> Sign Out
+            <BsBoxArrowLeft className="icon" style={{ marginRight: '8px' }} /> Sign Out
           </Link>
-          <FaHome onClick={goToHomePage} style={{ cursor: 'pointer' }} />
-          <IconNav/>
+          <FaHome onClick={goToHomePage} className="icon" style={{ cursor: 'pointer' }} />
+          <IconNav />
         </div>
       </div>
     </div>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IoList, IoHelpCircleOutline } from 'react-icons/io5';
 import { ImProfile } from 'react-icons/im';
-import {  MdPayment } from 'react-icons/md';
 import { BsBoxArrowLeft } from "react-icons/bs";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
@@ -64,9 +63,6 @@ const AgentProfilePage: React.FC = () => {
           </Link>
           <Link to="/agentdetails">
             <ImProfile style={{ marginRight: '8px' }} /> My Details
-          </Link>
-          <Link to="/paymentmethod">
-            <MdPayment style={{ marginRight: '8px' }} /> Payment Method
           </Link>
           <Link to= "/helpAgent">
             <IoHelpCircleOutline style={{ marginRight: '8px' }} />Need Help
