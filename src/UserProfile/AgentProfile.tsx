@@ -26,20 +26,15 @@ const AgentProfilePage: React.FC = () => {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [auth]);
 
   const handleSignOut = () => {
     alert('Signed out successfully!');
-    signOut(auth).then(() => {
+    {
       // Redirect to the Welcome folder and index.tsx
-      navigate('/Welcome/index');
-    }).catch((error) => {
-      console.error('Error signing out:', error.message);
-    });
-  };
-
-  const handleSignOutClick = () => {
-    handleSignOut();
+      navigate('/');
+      console.error('Error signing out:');
+    }
   };
 
   const getFirstName = () => {
@@ -58,7 +53,7 @@ const AgentProfilePage: React.FC = () => {
       <h3>Hello, {getFirstName()}</h3>
       <div className="main-container">
         <div className="left-nav">
-        <Link to="/AgentOrders">
+          <Link to="/AgentOrders">
             <IoList style={{ marginRight: '8px' }} /> My Orders
           </Link>
           <Link to="/agentdetails">
@@ -70,10 +65,7 @@ const AgentProfilePage: React.FC = () => {
           <Link to= "/MyStore">
             <MdOutlineStorefront /> My Store
           </Link>
-       
-          <Link to ='./LoginAgent'>
-            <BsBoxArrowLeft style={{ marginRight: '8px' }} /> Sign Out
-          </Link>
+          <BsBoxArrowLeft onClick={handleSignOut} style={{ marginRight: '8px' }} /> 
           <FaHome onClick={goToHomePage} style={{ cursor: 'pointer' }} />
           <IconNav/>
         </div>

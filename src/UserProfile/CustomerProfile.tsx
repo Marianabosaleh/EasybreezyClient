@@ -23,6 +23,15 @@ const CustomerProfilePage: React.FC = () => {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
+  const handleSignOut = () => {
+    alert('Signed out successfully!');
+    {
+      // Redirect to the Welcome folder and index.tsx
+      navigate('/');
+      console.error('Error signing out:');
+    }
+  };
+
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -92,9 +101,7 @@ const CustomerProfilePage: React.FC = () => {
           <Link to="/NeedHelpPage">
             <IoHelpCircleOutline className="icon" style={{ marginRight: '8px' }} />Need Help
           </Link>
-          <Link to='./LoginCustomer'>
-            <BsBoxArrowLeft className="icon" style={{ marginRight: '8px' }} /> Sign Out
-          </Link>
+          <BsBoxArrowLeft onClick={handleSignOut} style={{ marginRight: '8px' }} /> 
           <FaHome onClick={goToHomePage} className="icon" style={{ cursor: 'pointer' }} />
           <IconNav />
         </div>
