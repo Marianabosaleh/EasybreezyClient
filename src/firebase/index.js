@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { updateProfile } from "firebase/auth";
-import { getFirestore, collection, addDoc,  query, where, getDocs, doc , getDoc , setDoc , serverTimestamp } from "firebase/firestore";
+import { deleteDoc , getFirestore, collection, addDoc,  query, where, getDocs, doc , getDoc , setDoc , serverTimestamp } from "firebase/firestore";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -216,7 +216,7 @@ export async function loginAgent(email, password) {
 /////////////////////////////////////////////////////////////////////////////////////
 
 
-export async function addProductToCat(name, imageSrc, description, price, categoryName) {
+export async function addProductToCat(id , name, imageSrc, description, price, categoryName) {
   try {
     const auth = getAuth();
 const currentUser = auth.currentUser;
@@ -230,6 +230,7 @@ const userId = currentUser.uid;// This is the authenticated user's ID
 
     // Creating the structured product object with userId
     const productData = {
+      id:id,
       name: name,
       imageSrc: imageSrc,
       description: description,
@@ -597,3 +598,38 @@ export const getOrdersForAgent = async (agentUserId) => {
     throw new Error('Failed to fetch orders');
   }
 };
+const categoriesCollectionRef = collection(getFirestore(), 'categories');
+
+const removeProductFromCat = async (productId, category) => {
+  try {
+    if (!productId || !category) {
+      throw new Error('productId and category are required parameters');
+    }
+
+    console.log(`Removing product ${productId} from category ${category}`);
+
+    // Reference the correct collection based on the chosen category
+    const categoryCollectionRef = collection(db, category);
+
+    // Find the document with the given product ID
+    const categoryQuery = query(categoryCollectionRef, where('id', '==', productId));
+    const categorySnapshot = await getDocs(categoryQuery);
+
+    console.log(`Found ${categorySnapshot.size} matching documents`);
+
+    // Delete the document if it exists
+    if (!categorySnapshot.empty) {
+      const categoryDoc = categorySnapshot.docs[0];
+      console.log(`Deleting document with ID: ${categoryDoc.id}`);
+      await deleteDoc(doc(categoryCollectionRef, categoryDoc.id));
+      console.log(`Product removed from category successfully`);
+    } else {
+      console.log('No matching document found');
+    }
+  } catch (error) {
+    console.error('Error removing product from category:', error);
+    throw error; // Throw the error for handling in the calling function
+  }
+};
+
+export { removeProductFromCat };

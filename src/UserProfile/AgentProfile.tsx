@@ -67,7 +67,7 @@ const AgentProfilePage: React.FC = () => {
           <Link to= "/helpAgent">
             <IoHelpCircleOutline style={{ marginRight: '8px' }} />Need Help
           </Link>
-          <Link to= "/ShopPage">
+          <Link to= "/MyStore">
             <MdOutlineStorefront /> My Store
           </Link>
        
