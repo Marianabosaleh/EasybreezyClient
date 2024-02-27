@@ -156,3 +156,4 @@ const calculateTotal = (selectedItems: number[], cartItems: any[]) => {
 };
 
 export default CartPage;
+
