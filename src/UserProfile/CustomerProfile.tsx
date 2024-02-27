@@ -83,9 +83,6 @@ const CustomerProfilePage: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const goToHomePage = () => {
-    navigate('/HomePage');
-  };
 
   return (
     <div>
@@ -102,7 +99,6 @@ const CustomerProfilePage: React.FC = () => {
             <IoHelpCircleOutline className="icon" style={{ marginRight: '8px' }} />Need Help
           </Link>
           <BsBoxArrowLeft onClick={handleSignOut} style={{ marginRight: '8px' }} /> 
-          <FaHome onClick={goToHomePage} className="icon" style={{ cursor: 'pointer' }} />
           <IconNav />
         </div>
       </div>

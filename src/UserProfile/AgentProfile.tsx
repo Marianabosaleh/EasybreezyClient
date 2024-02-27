@@ -66,7 +66,6 @@ const AgentProfilePage: React.FC = () => {
             <MdOutlineStorefront /> My Store
           </Link>
           <BsBoxArrowLeft onClick={handleSignOut} style={{ marginRight: '8px' }} /> 
-          <FaHome onClick={goToHomePage} style={{ cursor: 'pointer' }} />
           <IconNav/>
         </div>
       </div>

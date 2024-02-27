@@ -65,22 +65,24 @@ const FavoritesPage: React.FC = () => {
     return <div>Error: {error}</div>;
   }
 
-  return (
-    <div className="favorites-page">
-      <h1>Favorites</h1>
-      <div className="favorites-list">
-        {favorites.map(item => (
-          <div key={item.id} className="favorite-item">
-            <span className="favorite-name">{item.name}</span>
-            <span className="favorite-price">${item.price}</span>
-            <img src={item.imageSrc} alt={item.name} className="favorite-image" />
-            <button onClick={() => handleRemoveFromFavorites(item.id)}>Remove</button>
-          </div>
-        ))}
+    return (
+      <div className="favorites-page">
+        <h1>Favorites</h1>
+        <div className="favorites-list">
+          {favorites.map(item => (
+            <div key={item.id} className="favorite-item">
+              <div className="favorite-details">
+                <img src={item.imageSrc} alt={item.name} className="favorite-image" />
+                <span className="favorite-name">{item.name}</span>
+                <span className="favorite-price">${item.price}</span>
+              </div>
+              <button onClick={() => handleRemoveFromFavorites(item.id)} className="remove-button">Remove</button>
+            </div>
+          ))}
+        </div>
+        <IconNav />
       </div>
-      <IconNav />
-    </div>
-  );
+    );
 };
 
 export default FavoritesPage;

@@ -1,38 +1,48 @@
-/* FavoritesPage.css */
-.favorites-page {
-    background-color: #FCEEE4;
-    padding: 20px;
-  }
-  
-  .favorites-list {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap; /* Allow items to wrap to the next line */
-  }
-  
-  .favorite-item {
-    flex: 0 0 200px; /* Each item takes up 200px width */
-    margin-right: 20px; /* Add spacing between items */
-    margin-bottom: 20px; /* Add spacing between rows */
-  }
-  
-  .favorite-details {
-    display: flex;
-    justify-content: space-between; /* Space out name and price */
-    align-items: center; /* Vertically center items */
-  }
-  
-  .favorite-name {
-    font-weight: bold;
-  }
-  
-  .favorite-price {
-    color: #666; /* Dim color for price */
-  }
+/* FavoritesPage.css adjustments to match CartPage.css */
 
-  .favorite-image {
-    max-width: 100px; /* Adjust the maximum width as needed */
-    max-height: 100px; /* Adjust the maximum height as needed */
-  }
-  
+.favorites-page {
+  background-color: #FCEEE4; /* Same as cart-page */
+  padding: 20px; /* Same padding for consistency */
+}
+
+.favorites-list {
+  list-style: none;
+  padding: 0; /* Same as cart-list */
+}
+
+.favorite-item {
+  margin-bottom: 15px; /* Same as cart-item */
+  background-color: #FCEEE4; /* Ensure background consistency */
+  padding: 10px; /* Similar padding for a consistent look */
+  border-radius: 5px; /* Rounded corners for aesthetic */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth, matching cart item style */
+}
+
+.favorite-details {
+  display: flex;
+  justify-content: space-between; /* Align name and price on opposite ends */
+  align-items: center; /* Center items vertically, same as cart-details */
+}
+
+.favorite-name, .favorite-price {
+  font-weight: bold;
+  color: #000000; /* Consistency with cart-name and cart-price */
+}
+
+.favorite-image {
+  max-width: 100px; /* Same as cart-image */
+  max-height: 100px;
+  margin-right: 10px; /* Consistent spacing */
+}
+
+/* Button styles to match CartPage.css */
+.remove-button, .checkout-button {
+  background-color: #c7a294; /* Adjust background color to match cart style */
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px; /* Consistent spacing for vertical layout */
+}
+
+
