@@ -1,11 +1,16 @@
 /* HomePage.css SAHAR */
-.HomePage {
+.Home {
   background-color: #FCEEE4;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
+  justify-content: flex-start; /* Change from center to flex-start */
+  height: 23vh;
+  padding-top: 5px;
+}
+
+h1 {
+  margin-top: 60; /* Remove default margin for h1 */
 }
 
 .categories-row {
@@ -47,6 +52,20 @@
 .cart-icon,
 .home-icon {
   font-size: 24px;
-  margin: 0 40px;
+  margin: 0 30px;
   cursor: pointer;
+  display: block;
+  color: #030303; /* Adjust the text color as needed */
+  text-decoration: none;
+  margin-bottom: 12px;
+  font-size: 16px; 
 }
+.search-icon :hover,
+.heart-icon :hover,
+.user-icon :hover,
+.cart-icon :hover,
+.home-icon :hover {
+  color: #ff00aa;
+}
+
+
