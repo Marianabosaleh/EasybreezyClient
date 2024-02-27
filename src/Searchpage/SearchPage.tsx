@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './styleS.css';
-import { getFirestore, collection, query, where, getDocs, DocumentData } from 'firebase/firestore';
+import { getFirestore, collection, query, getDocs, DocumentData } from 'firebase/firestore';
 import CartHandler from '../Categories/carthandler';
 import FavoritesHandler from '../Categories/favoriteshandler';
 import IconNav from '../components/iconNav';
@@ -30,12 +30,12 @@ const SearchPage: React.FC = () => {
     const categories = ['shoes', 'bottoms', 'tops', 'accessories'];
 
     for (const category of categories) {
-      const q = query(collection(firestore, category), where('name', '>=', term.toLowerCase()));
+      const q = query(collection(firestore, category));
       const querySnapshot = await getDocs(q);
 
       querySnapshot.forEach((doc) => {
         const productData: DocumentData = doc.data();
-        if (productData.name.toLowerCase().includes(term.toLowerCase())) {
+        if (productData.name.toLowerCase().includes(term.trim().toLowerCase())) {
           filteredProducts.push({
             id: doc.id,
             name: productData.name,
