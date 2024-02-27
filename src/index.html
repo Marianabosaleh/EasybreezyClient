@@ -4,6 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EasyBreezy</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Arial', sans-serif; /* Use your preferred font */
+    }
+
+    #root {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjust minmax for your content size */
+      gap: 20px; /* Space between items */
+      padding: 20px; /* Padding around the grid */
+      max-width: 1200px; /* Max width of the content, you can adjust this */
+      margin: 0 auto; /* Center the grid horizontally */
+    }
+
+    /* Example item style, adjust according to your content */
+    .grid-item {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  </style>
 </head>
 <body>
   <div id="root"></div> 

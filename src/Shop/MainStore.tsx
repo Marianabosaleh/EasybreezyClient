@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { TbSquareRoundedPlusFilled } from 'react-icons/tb';
 import { FaRectangleList } from "react-icons/fa6";
 import './MyStore.css'; // Import the CSS file
+import IconNav from '../components/iconNav';
 
 const MyStore: React.FC = () => {
   const handleAddProductClick = () => {
@@ -30,6 +31,7 @@ const MyStore: React.FC = () => {
           <FaRectangleList  className="icon" />
           My Products
         </Link>
+        <IconNav />
       </div>
     </div>
   );

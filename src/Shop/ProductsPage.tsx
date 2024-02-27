@@ -3,6 +3,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { FaHome } from 'react-icons/fa';
 import { getShopProducts, removeProductFromShop, removeProductFromCat } from '../firebase';
 import { IoTrash } from "react-icons/io5";
+import IconNav from '../components/iconNav';
 
 
 interface Product {
@@ -42,10 +43,6 @@ const ProductsPage: React.FC = () => {
 
     fetchProducts();
   }, [auth]);
-
-  const goToHomePage = () => {
-    window.location.href = '/HomePage';
-  };
 
   const handleRemoveFromShop = async (index: number) => {
     try {
@@ -94,7 +91,7 @@ const ProductsPage: React.FC = () => {
           )}
         </>
       )}
-      <FaHome style={{ cursor: 'pointer', marginTop: '25px', height: '30px', width: '55px' }} onClick={goToHomePage} />
+      <IconNav />
     </div>
   );
 };
