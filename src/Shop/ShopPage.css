@@ -45,10 +45,10 @@
   }
   
   .remove-button {
-    background-color: #f44336;
+    background-color: #f5d4b9;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 3px 6px;
     cursor: pointer;
     transition: background-color 0.3s ease;
   }

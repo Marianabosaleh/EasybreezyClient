@@ -109,21 +109,25 @@ const calculateTotal = (selectedItems: number[], cartItems: any[]) => {
       <ul className="cart-list">
         {/* Render each item in the cart */}
         {cartItems.map((item, index) => (
-          <li key={index} className="cart-item">
-            <div className="cart-details">
-              <span className="cart-name">{item.name}</span>
-              <span className="cart-price">${item.price}</span>
-              <img src={item.imageSrc} alt={item.name} className="cart-image" />
-            </div>
-            <input
-              type="checkbox"
-              checked={selectedItems.includes(index)}
-              onChange={() => handleCheckboxChange(index)}
-              className="custom-checkbox"
-            />
-            <button className="remove-button" onClick={() => handleRemoveFromCart(index)}>Remove</button>
-          </li>
-        ))}
+  <li key={index} className="cart-item">
+    <div className="cart-details">
+      <div className="cart-image-container">
+        <img src={item.imageSrc} alt={item.name} className="cart-image" />
+      </div>
+      <div className="cart-info">
+        <span className="cart-name">{item.name}</span>
+        <span className="cart-price">${item.price}</span>
+      </div>
+    </div>
+    <input
+      type="checkbox"
+      checked={selectedItems.includes(index)}
+      onChange={() => handleCheckboxChange(index)}
+      className="custom-checkbox"
+    />
+    <button className="remove-button" onClick={() => handleRemoveFromCart(index)}>Remove</button>
+  </li>
+))}
       </ul>
       {/* Select All checkbox */}
       <div className="select-all">

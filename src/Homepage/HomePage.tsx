@@ -92,7 +92,7 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="HomePage">
-      <h1>Welcome to Our Shopping Website!</h1>
+      <div className='Home'><h1>Welcome to Our Shopping Website!</h1></div>
       {/* Categories */}
       <div className="categories-row">
         {/* Shoes category */}
