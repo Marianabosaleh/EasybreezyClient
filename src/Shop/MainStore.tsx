@@ -20,13 +20,15 @@ const MyStore: React.FC = () => {
   return (
     <div className="my-store-container">
       <h1>Welcome To Your Shop</h1>
+      <br />
+      <br />
       <div className="icon-links">
         <Link to="/ShopPage" className="add-products-link" onClick={handleAddProductClick}>
           <TbSquareRoundedPlusFilled className="icon" />
           Add Products
         </Link>
         <br />
-        <br />
+      
         <Link to="/ProductsPage" className="my-products-link" onClick={handleMyProductsClick}>
           <FaRectangleList  className="icon" />
           My Products
