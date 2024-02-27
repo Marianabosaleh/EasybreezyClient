@@ -50,7 +50,7 @@ const AgentProfilePage: React.FC = () => {
 
   return (
     <div>
-      <h3>Hello, {getFirstName()}</h3>
+      <h3 className="heading-3">Hello, {getFirstName()}</h3>
       <div className="main-container">
         <div className="left-nav">
           <Link to="/AgentOrders">

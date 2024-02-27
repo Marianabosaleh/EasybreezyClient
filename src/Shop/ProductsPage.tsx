@@ -19,11 +19,13 @@ interface Product {
 const ProductsPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const auth = getAuth();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        debugger
+        const auth = getAuth();
+       
         const currentUser = auth.currentUser;
         if (currentUser) {
           const userId = currentUser.uid;
@@ -40,12 +42,15 @@ const ProductsPage: React.FC = () => {
         setLoading(false);
       }
     };
+    setTimeout(() => {
+      fetchProducts();
+    }, 1000);
 
-    fetchProducts();
-  }, [auth]);
+  }, []);
 
   const handleRemoveFromShop = async (index: number) => {
     try {
+      const auth = getAuth();
       const currentUser = auth.currentUser;
       if (currentUser) {
         const userId = currentUser.uid;

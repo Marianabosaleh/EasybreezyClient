@@ -6,10 +6,9 @@
 }
 
 .main-container {
-  display: flex;
-  justify-content: space-between;
-  max-width: 800px;
-  margin: 0 auto;
+  margin-bottom:200px;
+  max-width: 400px;
+  margin: auto;
 }
 
 .left-nav {
@@ -61,4 +60,9 @@
 .agent-details p strong {
   color: #555;
   font-weight: 600;
+}
+.heading-3{
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 20px;
 }

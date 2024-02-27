@@ -102,6 +102,7 @@ export async function loginCustomer(email, password) {
     }
     
     // If the email exists, proceed with logging in the user
+    debugger
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
@@ -185,7 +186,7 @@ export async function loginAgent(email, password) {
     if (querySnapshot.empty) {
       throw new Error("Email not found. Please check your email and try again.");
     }
-
+    debugger
     // If the email exists, proceed with logging in the agent
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;

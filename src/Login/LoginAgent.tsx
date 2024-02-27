@@ -10,7 +10,6 @@ const LoginAgent: React.FC = () => {
 
   function login() {
     setError("");
-  
     loginAgent(email, password)
       .then(({ user, shopName }) => {
         // Redirect to the home page with shop name

@@ -71,9 +71,7 @@ const AgentOrders: React.FC = () => {
 
   return (
     <div className="main-container">
-    <div className="left-nav">
-      {/* Left navigation or any other content */}
-    </div>
+
     <div className="agent-details">
       <h1>Agent Orders</h1>
       {orders.length === 0 ? (

@@ -4,7 +4,6 @@
   flex-direction: column;
   align-items: center; /* Center items horizontally */
   justify-content: flex-start; /* Align items to the top */
-  height: 100vh; /* Adjust height if needed */
 }
 
 .search-form {
