@@ -516,9 +516,8 @@ export async function addToFavorites(productData) {
 }
 
 // Function to remove item from favorites
-export async function removeFromFavorites(userId, index) {
+export async function removeFromFavorites(userId, itemId) {
   try {
-    // Reference the user's favorites document using the user's UID
     const favoritesRef = doc(db, 'favorites', userId);
     const favoritesDoc = await getDoc(favoritesRef);
 
@@ -526,8 +525,9 @@ export async function removeFromFavorites(userId, index) {
       throw new Error('Favorites document does not exist');
     }
 
-    const updatedFavoritesItems = favoritesDoc.data().items.filter((_, i) => i !== index);
-    await setDoc(favoritesRef, { items: updatedFavoritesItems });
+    // Filter out the item by ID
+    const updatedFavoritesItems = favoritesDoc.data().items.filter(item => item.id !== itemId);
+    await setDoc(favoritesRef, { items: updatedFavoritesItems }, { merge: true });
 
     console.log('Item removed from favorites successfully');
   } catch (error) {
