@@ -32,7 +32,7 @@ html, body, h1, h2, h3, h4, h5, h6, p, figure, figcaption {
   align-items: center; /* Centers content within each item */
   background-color: #FCEEE4;
   margin: auto;
-  height: auto;
+  height: 100%;
 }
 
 .product-item:hover {
@@ -42,7 +42,7 @@ html, body, h1, h2, h3, h4, h5, h6, p, figure, figcaption {
 /* Image and paragraph styles within product items */
 .product-container .product-item img {
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: cover;
   display: block;
   margin: auto;

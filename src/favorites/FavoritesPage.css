@@ -36,7 +36,7 @@
 }
 
 /* Button styles to match CartPage.css */
-.remove-button, .checkout-button {
+.remove-button {
   background-color: #c7a294; /* Adjust background color to match cart style */
   border: none;
   padding: 5px 10px;
@@ -45,4 +45,6 @@
   margin-top: 10px; /* Consistent spacing for vertical layout */
 }
 
-
+.remove-button:hover {
+  background-color: #d32f2f;
+}

@@ -102,7 +102,7 @@ export async function loginCustomer(email, password) {
     }
     
     // If the email exists, proceed with logging in the user
-    debugger
+
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
@@ -186,7 +186,7 @@ export async function loginAgent(email, password) {
     if (querySnapshot.empty) {
       throw new Error("Email not found. Please check your email and try again.");
     }
-    debugger
+   
     // If the email exists, proceed with logging in the agent
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
@@ -487,26 +487,19 @@ export async function addToFavorites(productData) {
     let favoritesDoc = await getDoc(favoritesRef);
     if (!favoritesDoc.exists()) {
       // Favorites document doesn't exist, create it
-      const initialFavoritesData = { items: [] };
-      await setDoc(favoritesRef, initialFavoritesData);
+      await setDoc(favoritesRef, { items: [productData] });
+    } else {
+      // Document exists, add new productData to the items array if not already included
+      const existingItems = favoritesDoc.data().items;
+      const isProductAlreadyFavorited = existingItems.some(item => item.id === productData.id);
 
-      // Fetch the newly created favorites document
-      favoritesDoc = await getDoc(favoritesRef);
+      if (!isProductAlreadyFavorited) {
+        const updatedItems = [...existingItems, productData];
+        await setDoc(favoritesRef, { items: updatedItems });
+      } else {
+        console.log('Item is already in favorites');
+      }
     }
-
-    // Log the favorites data to see if it's correctly fetched
-    console.log('Favorites data:', favoritesDoc.data());
-
-    // Check if favorites data or items are undefined
-    if (!favoritesDoc.data() || !favoritesDoc.data().items) {
-      throw new Error('Favorites data or items are undefined');
-    }
-
-    // Update the favorites with the new item
-    const updatedFavorites = {
-      items: [...favoritesDoc.data().items, productData]
-    };
-    await setDoc(favoritesRef, updatedFavorites);
 
     console.log('Item added to favorites successfully');
   } catch (error) {
@@ -518,7 +511,6 @@ export async function addToFavorites(productData) {
 // Function to remove item from favorites
 export async function removeFromFavorites(userId, index) {
   try {
-    // Reference the user's favorites document using the user's UID
     const favoritesRef = doc(db, 'favorites', userId);
     const favoritesDoc = await getDoc(favoritesRef);
 
@@ -526,15 +518,18 @@ export async function removeFromFavorites(userId, index) {
       throw new Error('Favorites document does not exist');
     }
 
+    // Remove the item based on its index
     const updatedFavoritesItems = favoritesDoc.data().items.filter((_, i) => i !== index);
     await setDoc(favoritesRef, { items: updatedFavoritesItems });
 
     console.log('Item removed from favorites successfully');
   } catch (error) {
-    console.error('Error removing item from favorites:', error.message);
+    console.error('Error removing item from favorites:', error.message);                 
     throw error;
   }
 }
+
+
 
 // Function to get favorite items
 export async function getFavoriteItems(userId) {
@@ -580,6 +575,39 @@ export const addOrder = async (orderDetails) => {
     throw new Error('Failed to add order to Firestore');
   }
 };
+export const addOrderIfNotExist = async (orderDetails) => {
+  const db = getFirestore();
+  const ordersRef = collection(db, 'orders');
+  // Example of generating a unique identifier for the order
+  const orderIdentifier = generateOrderIdentifier(orderDetails);
+
+  const q = query(ordersRef, where("uniqueIdentifier", "==", orderIdentifier));
+  try {
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) {
+      // No existing order found, safe to add a new one
+      return addOrder(orderDetails); // Reuse your existing `addOrder` function
+    } else {
+      console.log('Order already exists, skipping addition.');
+      // Handle the case where the order already exists (e.g., return existing order details)
+    }
+  } catch (error) {
+    console.error('Error checking for existing order:', error);
+    throw new Error('Failed to check for existing order');
+  }
+};
+function generateOrderIdentifier(orderDetails) {
+  // Example: Concatenate the customer's email, a simplified timestamp, and the total price
+  // Adjust the logic here based on what makes an order unique in your context
+  const email = orderDetails.customer.email;
+  const timestamp = orderDetails.timestamp?.seconds || Math.floor(Date.now() / 1000);
+  const totalPrice = orderDetails.totalPrice;
+
+  // Create a simple identifier by concatenating different parts of the order
+  // In a real application, consider a more robust way to generate a unique identifier
+  return `${email}-${timestamp}-${totalPrice}`;
+}
+
 
 // Function for agents to retrieve their orders
 export const getOrdersForAgent = async (agentUserId) => {
@@ -599,7 +627,7 @@ export const getOrdersForAgent = async (agentUserId) => {
     throw new Error('Failed to fetch orders');
   }
 };
-const categoriesCollectionRef = collection(getFirestore(), 'categories');
+
 
 const removeProductFromCat = async (productId, category) => {
   try {

@@ -42,7 +42,6 @@ h1 {
   align-items: flex-end;
   margin-top: auto;
   
-
 }
 
 /* Styles for specific icons */
@@ -65,7 +64,7 @@ h1 {
 .user-icon :hover,
 .cart-icon :hover,
 .home-icon :hover {
-  color: #ff00aa;
+  color: #c7a294;
 }
 
 

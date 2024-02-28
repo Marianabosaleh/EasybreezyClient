@@ -23,7 +23,6 @@ const ProductsPage: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        debugger
         const auth = getAuth();
        
         const currentUser = auth.currentUser;

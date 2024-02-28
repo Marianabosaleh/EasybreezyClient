@@ -77,16 +77,17 @@
   }
   
   .remove-button {
-    background-color: #ff1b1b;
+    background-color: #c7a294; /* Adjust background color to match cart style */
     border: none;
-    padding: 2px 5px; /* Adjust the padding to make the button smaller */
+    padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
-  }
-  .remove-button:hover {
-    background-color:#998272;
+    margin-top: 10px; /* Consistent spacing for vertical layout */
   }
   
+  .remove-button:hover {
+    background-color: #d32f2f;
+  }
   .checkout-button {
     background-color: #000000;
     color: #fff;
