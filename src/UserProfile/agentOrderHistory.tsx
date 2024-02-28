@@ -72,8 +72,9 @@ const AgentOrders: React.FC = () => {
   return (
     <div className="main-container">
 
-    <div className="agent-details">
+    <div className="agent-order">
       <h1>Agent Orders</h1>
+      <br/>
       {orders.length === 0 ? (
         <p>No orders found.</p>
       ) : (
@@ -86,8 +87,10 @@ const AgentOrders: React.FC = () => {
                 <p>Address: {`${order.address.street}, ${order.address.city}, ${order.address.zip}`}</p>
                 <p>Total Price: ${order.totalPrice}</p>
                 <ul>
+                  <br/>
                   {order.items.map((item, index) => (
                     <li key={index}>
+                      <br/>
                       <p>Name: {item.name}</p>
                       <p>Description: {item.description}</p>
                       <p>Price: ${item.price}</p>

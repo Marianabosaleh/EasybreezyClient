@@ -3,6 +3,8 @@ import { getFavoriteItems, removeFromFavorites } from '../firebase';
 import { getAuth } from 'firebase/auth';
 import './FavoritesPage.css';
 import IconNav from '../components/iconNav';
+import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
+
 
 const FavoritesPage: React.FC = () => {
   const [favorites, setFavorites] = useState<any[]>([]);
@@ -72,25 +74,32 @@ const FavoritesPage: React.FC = () => {
     return <div>Error: {error}</div>;
   }
 
-    return (
-      <div className="favorites-page">
-        <h1>Favorites</h1>
-        <div className="favorites-list">
-        {favorites.map((item, index) => (
-    <div key={item.id} className="favorite-item">
-        <div className="favorite-details">
-            <img src={item.imageSrc} alt={item.name} className="favorite-image" />
-            <span className="favorite-name">{item.name}</span>
-            <span className="favorite-price">${item.price}</span>
-        </div>
-        <button onClick={() => handleRemoveFromFavorites(index)} className="remove-button">Remove</button>
-    </div>
-))}
-
-        </div>
-        <IconNav />
+  return (
+    <div className="favorites-page">
+      <h1>Favorites</h1>
+      <div className="favorites-list">
+        {favorites.length > 0 ? (
+          favorites.map((item, index) => (
+            <div key={item.id} className="favorite-item">
+              <div className="favorite-details">
+                <img src={item.imageSrc} alt={item.name} className="favorite-image" />
+                <span className="favorite-name">{item.name}</span>
+                <span className="favorite-price">${item.price}</span>
+              </div>
+              <button onClick={() => handleRemoveFromFavorites(index)} className="remove-button">Remove</button>
+            </div>
+          ))
+        ) : (
+          <div className="no-favorites">
+            <HeartBrokenIcon style={{ fontSize: 60, color: 'grey' }} />
+        
+          </div>
+        )}
       </div>
-    );
+      <IconNav />
+    </div>
+  );
+  
 };
 
 export default FavoritesPage;

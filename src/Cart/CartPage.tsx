@@ -4,6 +4,7 @@ import { getAuth } from 'firebase/auth';
 import './CartPage.css';
 import PaymentForm from '../UserProfile/Payment';
 import IconNav from '../components/iconNav';
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 
 const CartPage: React.FC = () => {
   // State for cart items, user authentication, selected items, select all checkbox, total price, and checkout status
@@ -106,54 +107,55 @@ const calculateTotal = (selectedItems: number[], cartItems: any[]) => {
     <div className="cart-page">
       <h1>Shopping Cart</h1>
       <div style={{ borderBottom: '1px solid #000', paddingBottom: '8px' }}></div>
-      <ul className="cart-list">
-        {/* Render each item in the cart */}
-        {cartItems.map((item, index) => (
-  <li key={index} className="cart-item">
-    <div className="cart-details">
-      <div className="cart-image-container">
-        <img src={item.imageSrc} alt={item.name} className="cart-image" />
-      </div>
-      <div className="cart-info">
-        <span className="cart-name">{item.name}</span>
-        <span className="cart-price">${item.price}</span>
-      </div>
-    </div>
-    <input
-      type="checkbox"
-      checked={selectedItems.includes(index)}
-      onChange={() => handleCheckboxChange(index)}
-      className="custom-checkbox"
-    />
-    <button className="remove-button" onClick={() => handleRemoveFromCart(index)}>Remove</button>
-  </li>
-))}
-      </ul>
-      {/* Select All checkbox */}
-      <div className="select-all">
-        <input
-          type="checkbox"
-          checked={selectAll}
-          onChange={handleSelectAllChange}
-          className="custom-checkbox"
-        /> Select All
-      </div>
-      <br></br>
-      {/* Total price */}
-      <div className="total-price" style={{ fontWeight: 'bold', fontSize: '15px' }}>
-        Total Price: {typeof totalPrice === 'number' ? `$${totalPrice.toFixed(2)}` : '$0.00'}
-      </div>
-      {/* Checkout button */}
-      <button className="checkout-button" onClick={handleCheckoutClick}> CHECKOUT ({getSelectedItemsCount()}) </button>
-      {/* Conditionally render PaymentForm only when checkout is clicked */}
-      {isCheckoutClicked && (
-        <PaymentForm cartItems={cartItems.filter((_, index) => selectedItems.includes(index))} totalPrice={totalPrice} />
+      {cartItems.length > 0 ? (
+        <>
+          <ul className="cart-list">
+            {cartItems.map((item, index) => (
+              <li key={index} className="cart-item">
+                <div className="cart-details">
+                  <img src={item.imageSrc} alt={item.name} className="cart-image" />
+                  <div className="cart-info">
+                    <span className="cart-name">{item.name}</span>
+                    <span className="cart-price">${item.price}</span>
+                  </div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={selectedItems.includes(index)}
+                  onChange={() => handleCheckboxChange(index)}
+                  className="custom-checkbox"
+                />
+                <button className="remove-button" onClick={() => handleRemoveFromCart(index)}>Remove</button>
+              </li>
+            ))}
+          </ul>
+          <div className="select-all">
+            <input
+              type="checkbox"
+              checked={selectAll}
+              onChange={handleSelectAllChange}
+              className="custom-checkbox"
+            /> Select All
+          </div>
+          <div className="total-price">
+            Total Price: ${totalPrice.toFixed(2)}
+          </div>
+          <button className="checkout-button" onClick={() => setIsCheckoutClicked(true)}>
+            CHECKOUT ({selectedItems.length})
+          </button>
+          {isCheckoutClicked && (
+            <PaymentForm cartItems={cartItems.filter((_, index) => selectedItems.includes(index))} totalPrice={totalPrice} />
+          )}
+        </>
+      ) : (
+        <div className="empty-cart-message">
+          <RemoveShoppingCartIcon style={{ fontSize: 60, color: 'gray', margin: '20px' }} />
+          <p>Your cart is empty</p>
+        </div>
       )}
-      <IconNav/>
+      <IconNav />
     </div>
-    
   );
 };
-
 export default CartPage;
 

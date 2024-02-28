@@ -48,3 +48,32 @@
 .remove-button:hover {
   background-color: #d32f2f;
 }
+/* Add this to your FavoritesPage.css */
+
+.no-favorites {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh; /* Adjust height as needed to center vertically in the viewport */
+  color: #333; /* Adjust text color as needed */
+}
+
+.no-favorites p {
+  font-size: 1.5rem; /* Adjust font size as needed */
+  margin-top: 20px; /* Space between icon and text */
+}
+
+/* Adjust the container of the favorites page to ensure it centers content vertically */
+.favorites-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Take up at least the full height of the viewport */
+  background-color: #FCEEE4;
+  padding: 20px;
+}
+
+
+

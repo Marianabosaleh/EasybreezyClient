@@ -6,7 +6,7 @@
 }
 
 .main-container {
-  margin-bottom:200px;
+  margin-top:200px;
   max-width: 400px;
   margin: auto;
 }
@@ -19,7 +19,7 @@
   box-shadow: 0 0 10px rgba(219, 3, 3, 0.1);
   margin-bottom: 20px;
 }
-customerleft-nav
+
 .customerleft-nav {
   text-align: center;
   background-color: #FCEEE4;
@@ -53,6 +53,19 @@ customerleft-nav
   border-radius: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   color: #333;
+ margin-top: 200px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.agent-order {
+  flex: 5;
+  background-color: #FCEEE4;
+  padding: 50px;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #333;;
+ width: 500px;
+ height: auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 

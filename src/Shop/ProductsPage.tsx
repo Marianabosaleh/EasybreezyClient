@@ -77,6 +77,7 @@ const ProductsPage: React.FC = () => {
             <p>No products found in the shop.</p>
           ) : (
             <ul>
+  
               {products.map((product, index) => (
                 <li key={product.id}>
                   <div>

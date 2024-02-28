@@ -33,16 +33,16 @@ const LoginCustomer: React.FC = () => {
 
       <h2>Existing User</h2>
       <form>
-        <div className="username">
-          <label htmlFor="username">*Email</label>
-          <input type="text" id="username" name="username" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </div>
-
-        <div className="password">
-          <label htmlFor="password">*Password:</label>
-          <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </div>
-
+    <div className="form-group">
+      <label htmlFor="username" className="label">*Email</label>
+      <input className='input-username' type="text" id="username" name="username" value={email} onChange={(e) => setEmail(e.target.value)} required />
+    </div>
+    <br/>
+    <div className="form-group">
+      <label htmlFor="password" className="label">*Password:</label>
+      <input className='input-password' type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+    </div>
+    <br/>
         <div className="remember-me">
           <input type="checkbox" id="remember" />
           <label htmlFor="remember">Remember me</label>
@@ -50,13 +50,13 @@ const LoginCustomer: React.FC = () => {
 
         <Link to="#">Forget password?</Link>
       </form>
-
+      <br/>
       {error && <p className="error-message">{error}</p>}
 
       <button onClick={login} type='button' className='form-button'>
         Login
       </button>
-
+      <br/>
       <div className="new-user">
         <h2>New User</h2>
         <Link to='/RegisterCustomer'>

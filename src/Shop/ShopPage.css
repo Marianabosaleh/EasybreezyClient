@@ -61,13 +61,21 @@ form {
   margin-bottom: 20px;
 }
 
-input[type="text"],
+/* input[type="text"],
 input[type="number"] {
   padding: 10px;
   margin: 5px 0;
   display: block;
   width: calc(100% - 22px);
+} */
+.input-shop{
+  padding: 10px;
+  margin: 5px 0;
+  display: block;
+  width: calc(100% - 22px);
+
 }
+
 
 button[type="submit"] {
   background-color: #4CAF50;

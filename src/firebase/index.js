@@ -633,7 +633,7 @@ export const getOrdersForAgent = async (agentUserId) => {
 };
 
 
-const removeProductFromCat = async (productId, category) => {
+export const removeProductFromCat = async (productId, category) => {
   try {
     if (!productId || !category) {
       throw new Error('productId and category are required parameters');
@@ -665,4 +665,4 @@ const removeProductFromCat = async (productId, category) => {
   }
 };
 
-export { removeProductFromCat };
+// export { removeProductFromCat };

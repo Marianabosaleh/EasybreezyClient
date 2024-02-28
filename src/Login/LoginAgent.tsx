@@ -32,16 +32,16 @@ const LoginAgent: React.FC = () => {
 
       <h2>Existing User</h2>
       <form>
-        <div className="username">
+       
           <label htmlFor="username">*Email</label>
-          <input type="text" id="username" name="username" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </div>
-
-        <div className="password">
+          <input  className='input-username' type="text" id="username" name="username" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        
+        <br/>
+      
           <label htmlFor="password">*Password:</label>
-          <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </div>
-
+          <input className='input-password' type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+   
+          <br/>
         <div className="remember-me">
           <input type="checkbox" id="remember" />
           <label htmlFor="remember">Remember me</label>
@@ -55,7 +55,7 @@ const LoginAgent: React.FC = () => {
       <button onClick={login} type='button' className='form-button'>
         Login
       </button>
-
+      <br/>
       <div className="new-user">
         <h2>New User</h2>
         <Link to='/RegisterAgent'>

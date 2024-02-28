@@ -98,4 +98,18 @@
     width: 200px; /* Adjust the width to your desired value */
   }
   
+  .empty-cart-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh; /* Use a minimum height to ensure vertical centering */
+    color: #333;
+    text-align: center;
+  }
+  
+  .empty-cart-message p {
+    font-size: 1.5rem;
+    margin-top: 20px;
+  }
   
