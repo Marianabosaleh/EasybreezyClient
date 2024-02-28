@@ -44,10 +44,6 @@ const AgentProfilePage: React.FC = () => {
     return 'Guest';
   };
 
-  const goToHomePage = () => {
-    window.location.href = '/HomePage';
-  };
-
   return (
     <div>
       <h3 className="heading-3">Hello, {getFirstName()}</h3>

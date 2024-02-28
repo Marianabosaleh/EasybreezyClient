@@ -17,6 +17,17 @@
   padding: 140px;
   border-radius: 70px;
   box-shadow: 0 0 10px rgba(219, 3, 3, 0.1);
+  margin-bottom: 20px;
+}
+customerleft-nav
+.customerleft-nav {
+  text-align: center;
+  background-color: #FCEEE4;
+  padding: 140px;
+  border-radius: 70px;
+  box-shadow: 0 0 10px rgba(219, 3, 3, 0.1);
+  margin-bottom: 20px;
+  
 }
 
 .left-nav a {
@@ -66,3 +77,4 @@
   margin-top: 50px;
   margin-bottom: 20px;
 }
+

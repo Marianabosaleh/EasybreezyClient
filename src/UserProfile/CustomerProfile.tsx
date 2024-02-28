@@ -86,7 +86,7 @@ const CustomerProfilePage: React.FC = () => {
 
   return (
     <div>
-      <h3>Hello, {currentUser ? currentUser.displayName : 'Guest'}</h3>
+      <h3 className="heading-3"> Hello, {currentUser ? currentUser.displayName : 'Guest'}</h3>
       <div className="main-container">
         <div className="left-nav">
           <Link to="/ordershistory">
