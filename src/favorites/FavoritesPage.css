@@ -63,19 +63,7 @@
   font-size: 1.5rem; /* Adjust font size as needed */
   margin-top: 20px; /* Space between icon and text */
 }
-.cart-button,
-.cart-button:focus,
-.cart-button:hover,
-.cart-button:active {
-  background-color: transparent;
-  outline: none;
-  border: none;
-  padding: 0px;
-  cursor: pointer;
-  color: black;
-  display: flex;
-  margin-top: 20px;
-}
+
 .button-container {
   display: flex;
   justify-content: space-between;
