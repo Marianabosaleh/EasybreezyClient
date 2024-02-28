@@ -1,13 +1,13 @@
 import React from 'react';
 import { FaHome } from 'react-icons/fa';
-
+import './helper.css'
 const NeedHelpPage: React.FC = () => {
   function goToHomePage() {
     // Perform redirection here
     window.location.href = '/HomePage'; 
   }
   return (
-    <div>
+    <div className="container">
       <h1>Need Help ? </h1>
       <section>
         <h2>Ordering Process</h2>
@@ -20,8 +20,11 @@ const NeedHelpPage: React.FC = () => {
         </ol>
         <p>Once completed, you'll receive an order confirmation , Have A Nice Day !</p>
       </section>
+      <br/>
+        <h3>
+          *to reset your email/password contact us EasyBreezy@gmail.com*
+        </h3>
       {/* Add other sections as needed, following the structure above */}
-      <FaHome style={{ cursor: 'pointer', marginTop: '25px', height: '30px', width: '55px' }} onClick={goToHomePage} />
     </div>
   );
 };

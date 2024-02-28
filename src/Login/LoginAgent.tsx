@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 import { loginAgent } from "../firebase";
 import './style.css';
 
@@ -7,7 +7,14 @@ const LoginAgent: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
+  const handleForgetPassword = () => {
+    // Redirect to the Welcome folder and index.tsx
+      navigate('/helpAgent');
+      console.error('Error in help:');
+    
+  };
   function login() {
     setError("");
     loginAgent(email, password)
@@ -47,8 +54,10 @@ const LoginAgent: React.FC = () => {
           <label htmlFor="remember">Remember me</label>
         </div>
 
-        <Link to="#">Forget password?</Link>
-      </form>
+        <a  onClick={handleForgetPassword}>
+        Forget password?
+        </a>
+        </form>
 
       {error && <p className="error-message">{error}</p>}
 
