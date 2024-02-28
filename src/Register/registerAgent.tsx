@@ -127,10 +127,13 @@ const RegisterAgent: React.FC = () => {
           id="description"
           required
         />
-        
+        <br/>
         <button onClick={register} type="submit" className="submit-btn">
           Register
         </button>
+        <br/>
+        <br/>
+        <br/>
         {error && <p className="error-message">{error}</p>}
         <p>Already have an account? <Link to='/LoginAgent'>Login here</Link></p>
       </div>
