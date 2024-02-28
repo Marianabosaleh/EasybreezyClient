@@ -1,0 +1,49 @@
+/* styles.css */
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding:140px;
+  }
+  
+  h1 {
+    color: #333;
+  }
+  
+  section {
+    margin-top: 20px;
+  }
+  
+  h2 {
+    color: #555;
+  }
+  
+  p {
+    color: #4e4a4a;
+  }
+  
+  h3 {
+    color: #5a5a5a;
+  }
+  
+  ol {
+    list-style-type: decimal;
+    margin-left: 20px;
+    margin-bottom: 20px;
+  }
+  
+  li {
+    color: #363636;
+  }
+  
+  FaHome {
+    cursor: pointer;
+    margin-top: 25px;
+    height: 30px;
+    width: 55px;
+    color: #3498db; /* or any color you prefer */
+  }
+  
+  FaHome:hover {
+    color: #2980b9; /* change color on hover */
+  }
+  

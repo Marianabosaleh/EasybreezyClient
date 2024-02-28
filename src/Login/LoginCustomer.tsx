@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 import { loginCustomer } from "../firebase";
 import './style.css';
 
@@ -7,6 +7,14 @@ const LoginCustomer: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleForgetPassword = () => {
+    // Redirect to the Welcome folder and index.tsx
+      navigate('/NeedHelpPage');
+      console.error('Error in help:');
+    
+  };
 
   function login() {
     // Clear previous errors
@@ -48,7 +56,9 @@ const LoginCustomer: React.FC = () => {
           <label htmlFor="remember">Remember me</label>
         </div>
 
-        <Link to="#">Forget password?</Link>
+        <a  onClick={handleForgetPassword}>
+        Forget password?
+        </a>
       </form>
       <br/>
       {error && <p className="error-message">{error}</p>}

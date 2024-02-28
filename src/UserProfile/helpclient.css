@@ -1,0 +1,48 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h1 {
+    color: #333;
+  }
+  
+  section {
+    margin-top: 20px;
+  }
+  
+  h2 {
+    color: #555;
+  }
+  
+  p {
+    color: #666;
+  }
+  
+  h3 {
+    color: #777;
+  }
+  
+  ol {
+    list-style-type: decimal;
+    margin-left: 20px;
+    margin-bottom: 20px;
+  }
+  
+  li {
+    color: #888;
+  }
+  
+  FaHome {
+    cursor: pointer;
+    margin-top: 25px;
+    height: 30px;
+    width: 55px;
+    color: #3498db; /* or any color you prefer */
+  }
+  
+  FaHome:hover {
+    color: #2980b9; /* change color on hover */
+  }
+  
