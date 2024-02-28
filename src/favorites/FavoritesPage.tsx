@@ -4,6 +4,7 @@ import { getAuth } from 'firebase/auth';
 import './FavoritesPage.css';
 import IconNav from '../components/iconNav';
 import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
+import CartHandler from '../Categories/carthandler';
 
 
 const FavoritesPage: React.FC = () => {
@@ -86,7 +87,12 @@ const FavoritesPage: React.FC = () => {
                 <span className="favorite-name">{item.name}</span>
                 <span className="favorite-price">${item.price}</span>
               </div>
+                        <div className="button-container">
+
               <button onClick={() => handleRemoveFromFavorites(index)} className="remove-button">Remove</button>
+              <CartHandler product={item} /> {/* Add to Cart button */}
+              </div>
+
             </div>
           ))
         ) : (
