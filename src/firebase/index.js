@@ -509,7 +509,7 @@ export async function addToFavorites(productData) {
 }
 
 // Function to remove item from favorites
-export async function removeFromFavorites(userId, index) {
+export async function removeFromFavorites(userId, itemId) {
   try {
     const favoritesRef = doc(db, 'favorites', userId);
     const favoritesDoc = await getDoc(favoritesRef);
