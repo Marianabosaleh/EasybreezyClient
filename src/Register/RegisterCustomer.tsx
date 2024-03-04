@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import "./style0.css";
 import { Registercustomer } from "../firebase";
 
-// Define the RegisterAgent functional component
 const RegisterCustomer: React.FC = () => {
   // State variables to manage form input values and registration status
   const [firstName, setFirstName] = React.useState("");
@@ -16,7 +15,8 @@ const RegisterCustomer: React.FC = () => {
     // Pass additional fields to Registercustomer function
     Registercustomer(firstName, lastName, dateOfBirth, email, password)
       .then(() => {
-        // Registration successful, you can redirect the user to another page
+        // Redirect to the login page after successful registration
+        window.location.href = '/LoginCustomer'; 
       })
       .catch((errorMessage) => {
         // Handle registration error
