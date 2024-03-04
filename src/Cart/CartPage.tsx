@@ -64,12 +64,6 @@ const CartPage: React.FC = () => {
     }
   };
 
-  
-  // Set checkout clicked state to true
-  const handleCheckoutClick = () => {
-    setIsCheckoutClicked(true);
-  };
-
   // Toggle checkbox selection for a specific item
   const handleCheckboxChange = (index: number) => {
     const isSelected = selectedItems.includes(index);
@@ -78,9 +72,6 @@ const CartPage: React.FC = () => {
       : [...selectedItems, index];
     setSelectedItems(updatedSelection);
   };
-
-  // Get the count of selected items
-  const getSelectedItemsCount = () => selectedItems.length;
 
   // Toggle select all checkbox
   const handleSelectAllChange = () => {
@@ -141,7 +132,7 @@ const calculateTotal = (selectedItems: number[], cartItems: any[]) => {
             Total Price: ${totalPrice.toFixed(2)}
           </div>
           <button className="checkout-button" onClick={() => setIsCheckoutClicked(true)}>
-            CHECKOUT ({selectedItems.length})
+            CHECKOUT 
           </button>
           {isCheckoutClicked && (
             <PaymentForm cartItems={cartItems.filter((_, index) => selectedItems.includes(index))} totalPrice={totalPrice} />

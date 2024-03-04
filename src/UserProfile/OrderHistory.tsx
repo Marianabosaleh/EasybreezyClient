@@ -15,7 +15,6 @@ interface Order {
   totalPrice: number;
   customer: {
     email: string;
-    visaNumber: string;
   };
   address: {
     city: string;
